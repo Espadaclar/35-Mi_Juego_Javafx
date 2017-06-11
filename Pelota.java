@@ -41,25 +41,19 @@ public class Pelota extends Circle{
         velocidadEnY = 1;
     }
 
-    public void mover(int num){
+    public void mover(int largoEscena, int altoEscena){
         setTranslateX(getTranslateX() + velocidadEnX);
         setTranslateY(getTranslateY() + velocidadEnY);
-        if(getBoundsInParent().getMaxY() <= num  ){
-            velocidadEnX = +6;
-            velocidadEnY = +6;
+        if(getBoundsInParent().getMinX() <= 0 || 
+       getBoundsInParent().getMaxX() >= (largoEscena) ){
+            velocidadEnX = -velocidadEnX;
+
         }
-        //         else if(getBoundsInParent().getMinY() <=  0)        {
-        //             velocidadEnY = -velocidadEnY;
-        //         }
-        //         else if(getBoundsInParent().getMaxY() >= minimoYRaqueta && 
-        //                         (getBoundsInParent().getMaxX() - radius) <= maximoXRaqueta &&
-        //                           getBoundsInParent().getMinX() >= minimoXRaqueta ){
-        //             velocidadEnY = -velocidadEnY;
-        //         }
-        //         else if(getBoundsInParent().getMaxY() >= altoEscena){
-        //             velocidadEnY = 0;
-        //             velocidadEnX = 0;
-        //         }
+        if(getBoundsInParent().getMinY() <=  0 || 
+        getBoundsInParent().getMaxY() >= (altoEscena) ){
+            velocidadEnY = -velocidadEnY;
+        }
+
     }
 
     /**
