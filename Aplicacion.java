@@ -44,12 +44,12 @@ public class Aplicacion extends Application
     private int velocidadEnBarraY;
 
     Color COLOR_ESCENA = Color.WHITE;
-    int LARGO_ESCENA = 500;
+    int LARGO_ESCENA = 800;
     int ALTO_ESCENA = 650;
-    int LARGO_BOTON = 80;
-    int ALTO_BOTON = 5;
+    
+    int NUM_DE_BOLAS = 7;
 
-    int RADIO = 20;
+    int RADIO = 10;
 
     int LARGO_CAZADOR = (RADIO *2) +5;
     int ALTO_CAZADOR = (RADIO *2) +5;
@@ -73,15 +73,19 @@ public class Aplicacion extends Application
         root.getChildren().add(cazador);
 
         // SE CREA LA PELOTA
-        Pelota pelota = new Pelota(LARGO_ESCENA/2, ALTO_ESCENA/2, RADIO);
-        root.getChildren().add(pelota);
-        /////////////////////////////////////////////////CREACIÓN DE UN BOTÓN
-        Button boton = new Button("Stop / Move");
-        boton.setDefaultButton(true);
-        boton.setLayoutX(15);
-        boton.setLayoutY(ALTO_ESCENA - (ALTO_BOTON +10 ));
-        boton.setPrefSize(LARGO_BOTON, ALTO_BOTON);
-        root.getChildren().add(boton);
+        ArrayList<Pelota> pelotas = new ArrayList<>();
+        Pelota pelota =  new  Pelota( LARGO_ESCENA/2,ALTO_ESCENA/2, RADIO);
+        for(int i = 0; i < NUM_DE_BOLAS; i ++){
+            Random ale = new Random();
+            pelota = new Pelota(ale.nextInt(LARGO_ESCENA/2), ale.nextInt(ALTO_ESCENA/2), ale.nextInt(RADIO) +10);
+            pelotas.add(pelota);
+        }
+
+        for(int i = 0; i < NUM_DE_BOLAS; i ++){
+            pelota = pelotas.get(i);
+            root.getChildren().add(pelota);
+        }
+        //root.getChildren().add(pelota);
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -90,7 +94,10 @@ public class Aplicacion extends Application
         KeyFrame kf = new KeyFrame(Duration.seconds(.002), new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
                         //PARA QUE SE MUEVA LA POLOTA .
-                        pelota.mover(LARGO_ESCENA, ALTO_ESCENA);
+                        for(int i = 0; i < NUM_DE_BOLAS; i ++){
+                            pelotas.get(i).mover(LARGO_ESCENA, ALTO_ESCENA);                           
+                        }
+                        //pelota.mover(LARGO_ESCENA, ALTO_ESCENA);
 
                         //PARA QUE SE MUEVA LA BARRA .
                         cazador.mover(LARGO_ESCENA, ALTO_ESCENA);
@@ -101,16 +108,6 @@ public class Aplicacion extends Application
         timeline.getKeyFrames().add(kf);
         timeline.play();
         ventana.show();
-        
-        //////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ÉSTE ESTÁ ACTIVADO.
-        boton.setOnAction(event2 -> {
-                if (timeline.getStatus() == Status.PAUSED){
-                    timeline.play();
-                }
-                else{
-                    timeline.pause();
-                } 
-            });
 
         ////////////////////  para controlar AL CAZADOR con los botones de izquierda/derecha.
         root.setOnKeyPressed(event2 ->{
@@ -126,7 +123,24 @@ public class Aplicacion extends Application
                 else if(event2.getCode() == KeyCode.DOWN){
                     cazador.cambiarDireccionAbajo();
                 }
+                else if(event2.getCode() == KeyCode.ENTER){
+                    cazador.cambiarDireccionAbajo();
+                    root.getChildren().remove(pelotas.get(34));
+                }
             });
+
+        TimerTask tarea = new TimerTask() {
+                @Override
+                public void run() {
+                    Random ale = new Random(); 
+                    int val = ale.nextInt(90) +2;
+                    //                     root.getChildren().add(pelotas.get(val));
+                    //                     pelotas.get(val).mover(LARGO_ESCENA, ALTO_ESCENA);
+                    //                     pelotas.remove(val);
+                }                        
+            };
+        Timer timer = new Timer();
+        timer.schedule(tarea, 0, 1000);
 
     }
 }

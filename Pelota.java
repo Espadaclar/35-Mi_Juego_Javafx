@@ -19,10 +19,11 @@ public class Pelota extends Circle{
         super(centerX, centerY, radius);
         Random ale = new Random();
         Color colorPelota = new Color(ale.nextFloat(), ale.nextFloat(), ale.nextFloat(), ale.nextFloat());
+        color = colorPelota;
         this.setCenterX(centerX);
         this.setCenterY( centerY);
         this.setRadius(radius);
-        this.setFill(colorPelota);
+        this.setFill(color);
         this.setStroke(Color.RED);
         velocidadEnX = 1;
         velocidadEnY = 1;
@@ -76,6 +77,10 @@ public class Pelota extends Circle{
 
     public void setVelocidad_Y_APelota(int velocidad){
         velocidadEnY = velocidad;
+    }
+    
+    public void ponerColorNegro(){
+        color = Color.BLACK;
     }
 }
 
