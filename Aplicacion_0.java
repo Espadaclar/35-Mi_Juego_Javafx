@@ -89,7 +89,7 @@ public class Aplicacion_0 extends Application
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.setAutoReverse(true);
         //define un valor de movimiento en los ejes x / y.
-        KeyFrame kf = new KeyFrame(Duration.seconds(.002), new EventHandler<ActionEvent>() {
+        KeyFrame kf = new KeyFrame(Duration.seconds(.007), new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
                         //PARA QUE SE MUEVA LA POLOTA .
                         pelota.mover(LARGO_ESCENA, ALTO_ESCENA);

@@ -48,7 +48,7 @@ public class Aplicacion_1 extends Application
     int LARGO_ESCENA = 800;
     int ALTO_ESCENA = 650;
 
-    int NUM_DE_BOLAS = 70;
+    int NUM_DE_BOLAS = 17;
 
     int RADIO = 10;
 
@@ -61,7 +61,9 @@ public class Aplicacion_1 extends Application
     int ALTO_BOTON = 5;
 
     private int CONTADOR_TIEMPO = 1;
+    private int tiempoEnSegundos = 120;
     private int numeroBolaEnescena = 0;
+    private int eliminados = 0;
 
     public static void main(String[] args){
         //Esto se utiliza para ejecutar la aplicación 
@@ -79,12 +81,34 @@ public class Aplicacion_1 extends Application
         Cazador cazador = new Cazador(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
 
-        // SE CREA UNA COLECC�ON DE PELOTAS.
+        // SE CREA UNA COLECC�ON DE PELOTAS.
         ArrayList<Pelota> pelotas = new ArrayList<>();
         pelota =  new  Pelota( LARGO_ESCENA/2,ALTO_ESCENA/2, RADIO);
+        for(int i = 0; i < NUM_DE_BOLAS * 10; i ++){
+            Random ale = new Random();
+            pelota = new Pelota(ale.nextInt(LARGO_ESCENA/2), ale.nextInt(ALTO_ESCENA/2), ale.nextInt(RADIO) +10);
+            pelotas.add(pelota);
+        }
+        for(int i = 0; i < NUM_DE_BOLAS; i ++ ){
+            root.getChildren().add(pelotas.get(i));
+        }
 
-        int minutos = CONTADOR_TIEMPO;
+        //////////////////////////////////////SE CREA UN  CRONÓMETRO
+        Label tiempoPasado = new Label("0");
+        root.getChildren().add(tiempoPasado);
+        tiempoPasado.setStyle("-fx-font-size: 2em;");
+        tiempoPasado.setLayoutX(12);
+        tiempoPasado.setLayoutY(25);
 
+        //SE CREA EL Nº DE  BOLITAS QUE SE VAN ELIMINANDO,
+        Label bolitasEliminadas = new Label();
+        bolitasEliminadas.setTranslateX(12);
+        bolitasEliminadas.setTranslateY(60);
+        bolitasEliminadas.setTextFill(Color.BLACK);
+        bolitasEliminadas.setStyle("-fx-font-size: 2em;");
+        root.getChildren().add( bolitasEliminadas);
+
+        ////////////////////////////////////////// SE CREA UN BOTÓN
         Button boton = new Button("Stop / Move");
         boton.setDefaultButton(true);
         boton.setLayoutX(15);
@@ -92,51 +116,48 @@ public class Aplicacion_1 extends Application
         boton.setPrefSize(LARGO_BOTON, ALTO_BOTON);
         root.getChildren().add(boton);
 
-        for(int i = 0; i < NUM_DE_BOLAS * 10; i ++){
-            Random ale = new Random();
-            pelota = new Pelota(ale.nextInt(LARGO_ESCENA/2), ale.nextInt(ALTO_ESCENA/2), ale.nextInt(RADIO) +10);
-            pelotas.add(pelota);
-        }
-
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.setAutoReverse(true);
         //define un valor de movimiento en los ejes x / y.
         KeyFrame kf = new KeyFrame(Duration.seconds(.004), new EventHandler<ActionEvent>() {
+                    ////// ---------VARIABLE PARA PERMITIR EL RECUENTO DE LAS BARRITAS QUE SE VAN ELIMINADO.
+                    int val = root.getChildren().size();
                     public void handle(ActionEvent event) {
                         //PARA QUE SE MUEVA LA POLOTA .
                         for(int i = 0; i < NUM_DE_BOLAS; i ++){
                             pelotas.get(i).mover(LARGO_ESCENA, ALTO_ESCENA);                           
                         }
+
+                        eliminados = ( val - (root.getChildren().size()) );/// barritas eliminadas
+                        bolitasEliminadas.setText("Eliminadas  " +eliminados);
+
+
+                        // Actualizamos la etiqueta del tiempo
+                        int minutos = tiempoEnSegundos / 60;
+                        int segundos = tiempoEnSegundos % 60;
+                        tiempoPasado.setText(minutos + ":" + segundos);  
                         //pelota.mover(LARGO_ESCENA, ALTO_ESCENA);
+
+                        //                         if(CONTADOR_TIEMPO % 3 == 0){
+                        //                             for(int i = 0; i < NUM_DE_BOLAS; i ++ ){
+                        //                                 root.getChildren().add(pelotas.get(numeroBolaEnescena));
+                        //                                 numeroBolaEnescena ++;
+                        //                             }
+                        //                         }
 
                         //PARA QUE SE MUEVA LA BARRA .
                         cazador.mover(LARGO_ESCENA, ALTO_ESCENA);
-
                         ///////////////////////////////////////////////////
 
-                        if(CONTADOR_TIEMPO % 3 == 0 ){
-                            //Me cojo la siguiente bola y la meto en la pantalla
-                            //pelota = pelotas.get(numeroBolaEnescena);
-                            root.getChildren().add(pelotas.get(numeroBolaEnescena));
-                            //                             for(int i = 0; i < NUM_DE_BOLAS; i ++){
-                            // 
-                            //                                 root.getChildren().add(pelota);
-                            //                                 numeroBolaEnescena ++;
-                            //                             }
-                            
-                        }
-                        numeroBolaEnescena ++;
                     }
                 });
-
-        System.out.println(CONTADOR_TIEMPO);
 
         timeline.getKeyFrames().add(kf);
         timeline.play();
         ventana.show();
 
-        //////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ÉSTE EST�? ACTIVADO.
+        //////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ÉSTE EST�? ACTIVADO.
         boton.setOnAction(event2 -> {
                 if (timeline.getStatus() == Status.PAUSED){
                     timeline.play();
@@ -165,6 +186,7 @@ public class Aplicacion_1 extends Application
                     for(Pelota pelota: pelotas){
                         if( cazador.capturadaPelota(pelota) != false ){
                             root.getChildren().remove(pelota);
+
                         }
                     }
 
@@ -174,7 +196,7 @@ public class Aplicacion_1 extends Application
         TimerTask tarea = new TimerTask() {
                 @Override
                 public void run() {
-
+                    tiempoEnSegundos--;
                     CONTADOR_TIEMPO ++;
                     //                     root.getChildren().add(pelotas.get(val));
                     //                     pelotas.get(val).mover(LARGO_ESCENA, ALTO_ESCENA);
