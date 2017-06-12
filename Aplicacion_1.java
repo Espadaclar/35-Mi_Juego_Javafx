@@ -42,19 +42,23 @@ public class Aplicacion_1 extends Application
     //velocidad de la barra.
     private int velocidadEnBarraX;
     private int velocidadEnBarraY;
+    private  Pelota pelota;
 
     Color COLOR_ESCENA = Color.WHITE;
     int LARGO_ESCENA = 800;
     int ALTO_ESCENA = 650;
-    
+
     int NUM_DE_BOLAS = 7;
 
     int RADIO = 10;
 
-    int LARGO_CAZADOR = (RADIO *2) +5;
-    int ALTO_CAZADOR = (RADIO *2) +5;
+    int LARGO_CAZADOR = (50) +5;
+    int ALTO_CAZADOR = (50 ) +5;
     int POSICION_X_CAZADOR = LARGO_ESCENA /4;
     int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
+
+    int LARGO_BOTON = 80;
+    int ALTO_BOTON = 5;
 
     public static void main(String[] args){
         //Esto se utiliza para ejecutar la aplicación 
@@ -74,7 +78,7 @@ public class Aplicacion_1 extends Application
 
         // SE CREA LA PELOTA
         ArrayList<Pelota> pelotas = new ArrayList<>();
-        Pelota pelota =  new  Pelota( LARGO_ESCENA/2,ALTO_ESCENA/2, RADIO);
+        pelota =  new  Pelota( LARGO_ESCENA/2,ALTO_ESCENA/2, RADIO);
         for(int i = 0; i < NUM_DE_BOLAS; i ++){
             Random ale = new Random();
             pelota = new Pelota(ale.nextInt(LARGO_ESCENA/2), ale.nextInt(ALTO_ESCENA/2), ale.nextInt(RADIO) +10);
@@ -87,11 +91,18 @@ public class Aplicacion_1 extends Application
         }
         //root.getChildren().add(pelota);
 
+        Button boton = new Button("Stop / Move");
+        boton.setDefaultButton(true);
+        boton.setLayoutX(15);
+        boton.setLayoutY(ALTO_ESCENA - (ALTO_BOTON +10 ));
+        boton.setPrefSize(LARGO_BOTON, ALTO_BOTON);
+        root.getChildren().add(boton);
+
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.setAutoReverse(true);
         //define un valor de movimiento en los ejes x / y.
-        KeyFrame kf = new KeyFrame(Duration.seconds(.002), new EventHandler<ActionEvent>() {
+        KeyFrame kf = new KeyFrame(Duration.seconds(.004), new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
                         //PARA QUE SE MUEVA LA POLOTA .
                         for(int i = 0; i < NUM_DE_BOLAS; i ++){
@@ -109,6 +120,16 @@ public class Aplicacion_1 extends Application
         timeline.play();
         ventana.show();
 
+        //////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ÉSTE EST�? ACTIVADO.
+        boton.setOnAction(event2 -> {
+                if (timeline.getStatus() == Status.PAUSED){
+                    timeline.play();
+                }
+                else{
+                    timeline.pause();
+                } 
+            });
+
         ////////////////////  para controlar AL CAZADOR con los botones de izquierda/derecha.
         root.setOnKeyPressed(event2 ->{
                 if(event2.getCode() == KeyCode.RIGHT){
@@ -124,8 +145,13 @@ public class Aplicacion_1 extends Application
                     cazador.cambiarDireccionAbajo();
                 }
                 else if(event2.getCode() == KeyCode.ENTER){
-                    cazador.cambiarDireccionAbajo();
-                    
+
+                    for(Pelota pelota: pelotas){
+                        if( cazador.capturadaPelota(pelota) != false ){
+                            root.getChildren().remove(pelota);
+                        }
+                    }
+
                 }
             });
 
