@@ -48,17 +48,20 @@ public class Aplicacion_1 extends Application
     int LARGO_ESCENA = 800;
     int ALTO_ESCENA = 650;
 
-    int NUM_DE_BOLAS = 7;
+    int NUM_DE_BOLAS = 70;
 
     int RADIO = 10;
 
-    int LARGO_CAZADOR = (50) +5;
-    int ALTO_CAZADOR = (50 ) +5;
+    int LARGO_CAZADOR = (50) +15;
+    int ALTO_CAZADOR = (50 ) +15;
     int POSICION_X_CAZADOR = LARGO_ESCENA /4;
     int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
 
     int LARGO_BOTON = 80;
     int ALTO_BOTON = 5;
+
+    private int CONTADOR_TIEMPO = 1;
+    private int numeroBolaEnescena = 0;
 
     public static void main(String[] args){
         //Esto se utiliza para ejecutar la aplicaci√≥n 
@@ -76,20 +79,11 @@ public class Aplicacion_1 extends Application
         Cazador cazador = new Cazador(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
 
-        // SE CREA LA PELOTA
+        // SE CREA UNA COLECCÕON DE PELOTAS.
         ArrayList<Pelota> pelotas = new ArrayList<>();
         pelota =  new  Pelota( LARGO_ESCENA/2,ALTO_ESCENA/2, RADIO);
-        for(int i = 0; i < NUM_DE_BOLAS; i ++){
-            Random ale = new Random();
-            pelota = new Pelota(ale.nextInt(LARGO_ESCENA/2), ale.nextInt(ALTO_ESCENA/2), ale.nextInt(RADIO) +10);
-            pelotas.add(pelota);
-        }
 
-        for(int i = 0; i < NUM_DE_BOLAS; i ++){
-            pelota = pelotas.get(i);
-            root.getChildren().add(pelota);
-        }
-        //root.getChildren().add(pelota);
+        int minutos = CONTADOR_TIEMPO;
 
         Button boton = new Button("Stop / Move");
         boton.setDefaultButton(true);
@@ -97,6 +91,12 @@ public class Aplicacion_1 extends Application
         boton.setLayoutY(ALTO_ESCENA - (ALTO_BOTON +10 ));
         boton.setPrefSize(LARGO_BOTON, ALTO_BOTON);
         root.getChildren().add(boton);
+
+        for(int i = 0; i < NUM_DE_BOLAS * 10; i ++){
+            Random ale = new Random();
+            pelota = new Pelota(ale.nextInt(LARGO_ESCENA/2), ale.nextInt(ALTO_ESCENA/2), ale.nextInt(RADIO) +10);
+            pelotas.add(pelota);
+        }
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -113,8 +113,24 @@ public class Aplicacion_1 extends Application
                         //PARA QUE SE MUEVA LA BARRA .
                         cazador.mover(LARGO_ESCENA, ALTO_ESCENA);
 
+                        ///////////////////////////////////////////////////
+
+                        if(CONTADOR_TIEMPO % 3 == 0 ){
+                            //Me cojo la siguiente bola y la meto en la pantalla
+                            //pelota = pelotas.get(numeroBolaEnescena);
+                            root.getChildren().add(pelotas.get(numeroBolaEnescena));
+                            //                             for(int i = 0; i < NUM_DE_BOLAS; i ++){
+                            // 
+                            //                                 root.getChildren().add(pelota);
+                            //                                 numeroBolaEnescena ++;
+                            //                             }
+                            
+                        }
+                        numeroBolaEnescena ++;
                     }
                 });
+
+        System.out.println(CONTADOR_TIEMPO);
 
         timeline.getKeyFrames().add(kf);
         timeline.play();
@@ -158,8 +174,8 @@ public class Aplicacion_1 extends Application
         TimerTask tarea = new TimerTask() {
                 @Override
                 public void run() {
-                    Random ale = new Random(); 
-                    int val = ale.nextInt(90) +2;
+
+                    CONTADOR_TIEMPO ++;
                     //                     root.getChildren().add(pelotas.get(val));
                     //                     pelotas.get(val).mover(LARGO_ESCENA, ALTO_ESCENA);
                     //                     pelotas.remove(val);
