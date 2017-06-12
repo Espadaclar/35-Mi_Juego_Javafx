@@ -7,8 +7,7 @@ import java.util.ArrayList;
  * @author franciscoJavier
  */
 public class Cazador extends Rectangle{
- 
-    
+
     private double x;
     private double y;
     private double width;
@@ -22,7 +21,7 @@ public class Cazador extends Rectangle{
 
     public Cazador(double x, double y, double width, double height, Color color) {
         super();
-        
+
         this.setTranslateY(y);
         this.setWidth(width);
         this.setHeight(height);
@@ -61,36 +60,51 @@ public class Cazador extends Rectangle{
         }
 
     }
-    
+
     public void cambiarDireccionDerecha(int largoEscena){
         if(getBoundsInParent().getMaxX() != largoEscena){
             velocidadX = 1;
         }
     }
-    
+
     public void cambiarDireccionIzquierda(){
         if(getBoundsInParent().getMinY() != 0 ){
             velocidadX =  -1;
         }
     }
-    
+
     public void cambiarDireccionArriba(int altoEscena){
         if(getBoundsInParent().getMaxY() != altoEscena){
             velocidadY = -1;
         }
     }
-    
+
     public void cambiarDireccionAbajo(){
         if(getBoundsInParent().getMinX() != 0 ){
             velocidadY =  1;
         }
     }
+
+    public boolean bolaCapturada(Pelota pelota ){
+        boolean capturada = false;
+        double cap_MaxX = getBoundsInParent().getMaxX();
+        double cap_MinX = getBoundsInParent().getMinX();
+        double cac_MinY = getBoundsInParent().getMinY();
+        double cac_MaxY = getBoundsInParent().getMaxY();
+
+        double pelota_MaxX = pelota.getBoundsInParent().getMaxX();
+        double pelota_MinX = pelota.getBoundsInParent().getMinX();
+        double pelota_MinY = pelota.getBoundsInParent().getMinY(); 
+        double pelota_MaxY = pelota.getBoundsInParent().getMaxY();
+        if( pelota_MaxX <= cap_MaxX && pelota_MinX >= cap_MinX &&
+               pelota_MinY >= cac_MinY && pelota_MaxY <=  cac_MaxY){
+           
+                   capturada = true;
+        }
+        return capturada;
+    }
+
 }
-
-
-
-
-
 
 
   

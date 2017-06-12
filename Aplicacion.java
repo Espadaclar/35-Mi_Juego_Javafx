@@ -1,4 +1,3 @@
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -33,7 +32,7 @@ import javafx.scene.shape.Shape;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Aplicacion_0 extends Application 
+public class Aplicacion extends Application 
 {
     private Circle cicle;
     private Rectangle rectangulo;
@@ -56,6 +55,8 @@ public class Aplicacion_0 extends Application
     int ALTO_CAZADOR = (RADIO *2) +5;
     int POSICION_X_CAZADOR = LARGO_ESCENA /4;
     int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
+    
+    boolean eliminarBola = false;
 
     public static void main(String[] args){
         //Esto se utiliza para ejecutar la aplicación 
@@ -76,13 +77,8 @@ public class Aplicacion_0 extends Application
         // SE CREA LA PELOTA
         Pelota pelota = new Pelota(LARGO_ESCENA/2, ALTO_ESCENA/2, RADIO);
         root.getChildren().add(pelota);
-        /////////////////////////////////////////////////CREACIÓN DE UN BOTÓN
-        Button boton = new Button("Stop / Move");
-        boton.setDefaultButton(true);
-        boton.setLayoutX(15);
-        boton.setLayoutY(ALTO_ESCENA - (ALTO_BOTON +10 ));
-        boton.setPrefSize(LARGO_BOTON, ALTO_BOTON);
-        root.getChildren().add(boton);
+       
+        boolean eliminarBola = false;
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -102,16 +98,8 @@ public class Aplicacion_0 extends Application
         timeline.getKeyFrames().add(kf);
         timeline.play();
         ventana.show();
+
         
-        //////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ÉSTE ESTÁ ACTIVADO.
-        boton.setOnAction(event2 -> {
-                if (timeline.getStatus() == Status.PAUSED){
-                    timeline.play();
-                }
-                else{
-                    timeline.pause();
-                } 
-            });
 
         ////////////////////  para controlar AL CAZADOR con los botones de izquierda/derecha.
         root.setOnKeyPressed(event2 ->{
@@ -127,11 +115,27 @@ public class Aplicacion_0 extends Application
                 else if(event2.getCode() == KeyCode.DOWN){
                     cazador.cambiarDireccionAbajo();
                 }
-                else if(event2.getCode() == KeyCode.SPACE){
-                    cazador.cambiarDireccionAbajo();
-                    
+                 else if(event2.getCode() == KeyCode.ENTER){
+                    // eliminarBola = true;
+                   // cazador.bolaCapturada(pelota) == true;
                 }
-            });
+                
+                if(eliminarBola == true && cazador.bolaCapturada(pelota) == true){
+                root.getChildren().remove(pelota);
+            }
 
+            });
+            
+            
     }
 }
+
+
+
+
+
+
+
+
+
+
