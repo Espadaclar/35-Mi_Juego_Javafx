@@ -77,7 +77,7 @@ public class Aplicacion_1 extends Application
         Scene escena = new Scene(root, LARGO_ESCENA, ALTO_ESCENA, COLOR_ESCENA);//Se crea la escena con el contenedor que contiene los objetos.
         ventana.setScene(escena);//pasamos al parámetro ventana el objeto escena.
 
-        //SE CREA EL CAZADOR
+        //SE CREA EL CAZADOR DE BOLITAS.
         Cazador cazador = new Cazador(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
 
@@ -89,24 +89,27 @@ public class Aplicacion_1 extends Application
             pelota = new Pelota(ale.nextInt(LARGO_ESCENA/2), ale.nextInt(ALTO_ESCENA/2), ale.nextInt(RADIO) +10);
             pelotas.add(pelota);
         }
-        for(int i = 0; i < NUM_DE_BOLAS; i ++ ){
+        for(int i = 0; i < NUM_DE_BOLAS; i ++ ){// añade pelotas a la escena.
             root.getChildren().add(pelotas.get(i));
         }
 
         //////////////////////////////////////SE CREA UN  CRONÓMETRO
-        Label tiempoPasado = new Label("0");
-        root.getChildren().add(tiempoPasado);
-        tiempoPasado.setStyle("-fx-font-size: 2em;");
-        tiempoPasado.setLayoutX(12);
-        tiempoPasado.setLayoutY(25);
+        
+        Label tiempoPasado = new Label("0");  //-------------objeto Label para pasar como parametro.
+        Objetos_De_Apollo miLabelCronometro = new Objetos_De_Apollo();//-Objetos_De_Apollo, hecha en este proyecto.
+        miLabelCronometro.crearUnLabel(tiempoPasado, root,12, 25);//-------muestra el nº de bolitas eliminadas.
+        
+//         Label tiempoPasado = new Label("0");
+//         
+//         root.getChildren().add(tiempoPasado);
+//         tiempoPasado.setStyle("-fx-font-size: 2em;");
+//         tiempoPasado.setLayoutX(12);
+//         tiempoPasado.setLayoutY(25);
 
-        //SE CREA EL Nº DE  BOLITAS QUE SE VAN ELIMINANDO,
-        Label bolitasEliminadas = new Label();
-        bolitasEliminadas.setTranslateX(12);
-        bolitasEliminadas.setTranslateY(60);
-        bolitasEliminadas.setTextFill(Color.BLACK);
-        bolitasEliminadas.setStyle("-fx-font-size: 2em;");
-        root.getChildren().add( bolitasEliminadas);
+        //SE CREA EL  CONTADOR DEL Nº DE  BOLITAS QUE SE VAN ELIMINANDO,       
+        Label bolitasEliminadas = new Label();  //-------------objeto Label para pasar como parametro.
+        Objetos_De_Apollo miLabelContador = new Objetos_De_Apollo();//-Objetos_De_Apollo, hecha en este proyecto.
+        miLabelContador.crearUnLabel(bolitasEliminadas, root, 12, 60);//-------muestra el nº de bolitas eliminadas.
 
         ////////////////////////////////////////// SE CREA UN BOTÓN
         Button boton = new Button("Stop / Move");
@@ -129,7 +132,7 @@ public class Aplicacion_1 extends Application
                             pelotas.get(i).mover(LARGO_ESCENA, ALTO_ESCENA);                           
                         }
 
-                        eliminados = ( val - (root.getChildren().size()) );/// barritas eliminadas
+                        eliminados = ( val - (root.getChildren().size()) );///---- nº de bolitas eliminadas.
                         bolitasEliminadas.setText("Eliminadas  " +eliminados);
 
 
