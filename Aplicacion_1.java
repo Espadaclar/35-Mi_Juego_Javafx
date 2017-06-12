@@ -27,10 +27,7 @@ import java.util.TimerTask;
 import java.util.ArrayList;
 import javafx.scene.shape.Shape;
 /**
- * Write a description of class Circulo here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ *franciscoJavier.
  */
 public class Aplicacion_1 extends Application 
 {
@@ -61,7 +58,7 @@ public class Aplicacion_1 extends Application
     int ALTO_BOTON = 5;
 
     private int CONTADOR_TIEMPO = 1;
-    private int tiempoEnSegundos = 120;
+    private int tiempoEnSegundos = 6;
     private int numeroBolaEnescena = 0;
     private int eliminados = 0;
 
@@ -81,7 +78,7 @@ public class Aplicacion_1 extends Application
         Cazador cazador = new Cazador(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
 
-        // SE CREA UNA COLECC�ON DE PELOTAS.
+        // SE CREA UNA COLECCioN DE PELOTAS.
         ArrayList<Pelota> pelotas = new ArrayList<>();
         pelota =  new  Pelota( LARGO_ESCENA/2,ALTO_ESCENA/2, RADIO);
         for(int i = 0; i < NUM_DE_BOLAS * 10; i ++){
@@ -94,17 +91,10 @@ public class Aplicacion_1 extends Application
         }
 
         //////////////////////////////////////SE CREA UN  CRONÓMETRO
-        
+
         Label tiempoPasado = new Label("0");  //-------------objeto Label para pasar como parametro.
         Objetos_De_Apollo miLabelCronometro = new Objetos_De_Apollo();//-Objetos_De_Apollo, hecha en este proyecto.
-        miLabelCronometro.crearUnLabel(tiempoPasado, root,12, 25);//-------muestra el nº de bolitas eliminadas.
-        
-//         Label tiempoPasado = new Label("0");
-//         
-//         root.getChildren().add(tiempoPasado);
-//         tiempoPasado.setStyle("-fx-font-size: 2em;");
-//         tiempoPasado.setLayoutX(12);
-//         tiempoPasado.setLayoutY(25);
+        miLabelCronometro.crearUnLabel(tiempoPasado, root,12, 25);//-------muestra cronometro  de descuento.
 
         //SE CREA EL  CONTADOR DEL Nº DE  BOLITAS QUE SE VAN ELIMINANDO,       
         Label bolitasEliminadas = new Label();  //-------------objeto Label para pasar como parametro.
@@ -127,7 +117,7 @@ public class Aplicacion_1 extends Application
                     ////// ---------VARIABLE PARA PERMITIR EL RECUENTO DE LAS BARRITAS QUE SE VAN ELIMINADO.
                     int val = root.getChildren().size();
                     public void handle(ActionEvent event) {
-                        //PARA QUE SE MUEVA LA POLOTA .
+                        //DAR MOVIMIENTO A LAS PELOTAS .
                         for(int i = 0; i < NUM_DE_BOLAS; i ++){
                             pelotas.get(i).mover(LARGO_ESCENA, ALTO_ESCENA);                           
                         }
@@ -135,23 +125,20 @@ public class Aplicacion_1 extends Application
                         eliminados = ( val - (root.getChildren().size()) );///---- nº de bolitas eliminadas.
                         bolitasEliminadas.setText("Eliminadas  " +eliminados);
 
-
                         // Actualizamos la etiqueta del tiempo
                         int minutos = tiempoEnSegundos / 60;
                         int segundos = tiempoEnSegundos % 60;
                         tiempoPasado.setText(minutos + ":" + segundos);  
-                        //pelota.mover(LARGO_ESCENA, ALTO_ESCENA);
-
-                        //                         if(CONTADOR_TIEMPO % 3 == 0){
-                        //                             for(int i = 0; i < NUM_DE_BOLAS; i ++ ){
-                        //                                 root.getChildren().add(pelotas.get(numeroBolaEnescena));
-                        //                                 numeroBolaEnescena ++;
-                        //                             }
-                        //                         }
-
-                        //PARA QUE SE MUEVA LA BARRA .
+                        if(tiempoEnSegundos == 0){
+                            timeline.stop();
+                            root.getChildren().removeAll(pelotas);
+                            Label finDelJuego = new Label("0");  //-------------objeto Label para pasar como parametro.
+                            Objetos_De_Apollo miLabelCronometro = new Objetos_De_Apollo();//-Objetos_De_Apollo, hecha en este proyecto.
+                            miLabelCronometro.crearUnLabel(finDelJuego, root,(LARGO_ESCENA /2) -100, ALTO_ESCENA /2);//-------muestra cronometro  de descuento.
+                            finDelJuego.setText(" -- GANE  OVER -- ");
+                        }
+                        //PARA QUE SE MUEVA EL CUADRADO CAZADOR .
                         cazador.mover(LARGO_ESCENA, ALTO_ESCENA);
-                        ///////////////////////////////////////////////////
 
                     }
                 });
@@ -159,8 +146,7 @@ public class Aplicacion_1 extends Application
         timeline.getKeyFrames().add(kf);
         timeline.play();
         ventana.show();
-
-        //////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ÉSTE EST�? ACTIVADO.
+        //////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ESTE ACTIVADO.
         boton.setOnAction(event2 -> {
                 if (timeline.getStatus() == Status.PAUSED){
                     timeline.play();
@@ -189,25 +175,21 @@ public class Aplicacion_1 extends Application
                     for(Pelota pelota: pelotas){
                         if( cazador.capturadaPelota(pelota) != false ){
                             root.getChildren().remove(pelota);
-
                         }
                     }
 
                 }
             });
-
+        //---------- REALIZA UNA ACCION CADA UN Nº DETERMINADO DE MILISEGUNDOS.
         TimerTask tarea = new TimerTask() {
                 @Override
                 public void run() {
                     tiempoEnSegundos--;
                     CONTADOR_TIEMPO ++;
-                    //                     root.getChildren().add(pelotas.get(val));
-                    //                     pelotas.get(val).mover(LARGO_ESCENA, ALTO_ESCENA);
-                    //                     pelotas.remove(val);
                 }                        
             };
+
         Timer timer = new Timer();
         timer.schedule(tarea, 0, 1000);
-
     }
 }

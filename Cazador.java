@@ -21,7 +21,6 @@ public class Cazador extends Rectangle{
 
     public Cazador(double x, double y, double width, double height, Color color) {
         super();
-
         this.setTranslateY(y);
         this.setWidth(width);
         this.setHeight(height);
@@ -45,10 +44,12 @@ public class Cazador extends Rectangle{
         this.setStroke(Color.BLACK);
     }
 
+    /**
+     * Limita el movimiento del cuadrado CAZADOR a los limites de la escena.
+     */
     public void mover(int largoEscena, int altoEscena){
         setTranslateX(getTranslateX() + velocidadX);
         setTranslateY(getTranslateY() + velocidadY);
-
         /////para que la barra no se salga de los límites de la escena.
         if(getBoundsInParent().getMinX() <= 0 || 
         getBoundsInParent().getMaxX() >= (largoEscena) ){
@@ -85,6 +86,9 @@ public class Cazador extends Rectangle{
         }
     }
 
+    /**
+     * comprueba si las coordenadas de la bola estan dentro deL limite de las coordenadas del cuadrado CAZADOR.
+     */
     public boolean capturadaPelota(Pelota pelota ){
         Shape c = Shape.intersect(this, pelota);
         boolean capturada = false;
@@ -101,7 +105,6 @@ public class Cazador extends Rectangle{
         if(c.getBoundsInParent().getWidth() != -1){
             if( pelota_MaxX <= cap_MaxX && pelota_MinX >= cap_MinX &&
             pelota_MinY >= cac_MinY && pelota_MaxY <=  cac_MaxY){
-
                 capturada = true;
             }
         }

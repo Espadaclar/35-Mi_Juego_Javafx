@@ -3,6 +3,27 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.*;
 
 import javafx.scene.Group;
+
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaView;
+
+
 /**
  * Write a description of class Objetos_De_Apollo here.
  * 
@@ -11,7 +32,7 @@ import javafx.scene.Group;
  */
 public class Objetos_De_Apollo
 {
-    // instance variables - replace the example below with your own
+
     private Label bolitasEliminadas;
 
     /**
@@ -19,13 +40,11 @@ public class Objetos_De_Apollo
      */
     public Objetos_De_Apollo()
     {
-         
 
     }
 
-
     /**
-     * el parámetro es el contador de las bolas que se van eliminando.
+     * para crear elementos Label.
      */
     public void crearUnLabel(Label nuevoLabel, Group root, int x, int y ){
         nuevoLabel.setTranslateX(x);
@@ -34,4 +53,10 @@ public class Objetos_De_Apollo
         nuevoLabel.setStyle("-fx-font-size: 2em;");
         root.getChildren().add( nuevoLabel);
     }
+
+
 }
+
+
+
+
