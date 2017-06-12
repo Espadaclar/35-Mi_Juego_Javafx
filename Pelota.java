@@ -14,7 +14,7 @@ public class Pelota extends Circle{
     private int velocidadEnY;
 
     private Color color;
-
+    private Color bordePelota;
     public Pelota(double centerX, double centerY, double radius){
         super(centerX, centerY, radius);
         Random ale = new Random();
@@ -81,6 +81,10 @@ public class Pelota extends Circle{
     
     public void ponerColorNegro(){
         color = Color.BLACK;
+    }
+    
+    public void setColor(Color color7){
+        color = color7;
     }
 }
 

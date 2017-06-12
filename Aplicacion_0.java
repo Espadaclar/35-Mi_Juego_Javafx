@@ -32,7 +32,7 @@ import javafx.scene.shape.Shape;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Aplicacion extends Application 
+public class Aplicacion_0 extends Application 
 {
     private Circle cicle;
     private Rectangle rectangulo;
@@ -51,12 +51,10 @@ public class Aplicacion extends Application
 
     int RADIO = 20;
 
-    int LARGO_CAZADOR = (RADIO *2) +5;
-    int ALTO_CAZADOR = (RADIO *2) +5;
+    int LARGO_CAZADOR = (RADIO *3) +5;
+    int ALTO_CAZADOR = (RADIO *3) +5;
     int POSICION_X_CAZADOR = LARGO_ESCENA /4;
     int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
-    
-    boolean eliminarBola = false;
 
     public static void main(String[] args){
         //Esto se utiliza para ejecutar la aplicación 
@@ -77,8 +75,15 @@ public class Aplicacion extends Application
         // SE CREA LA PELOTA
         Pelota pelota = new Pelota(LARGO_ESCENA/2, ALTO_ESCENA/2, RADIO);
         root.getChildren().add(pelota);
-       
-        boolean eliminarBola = false;
+        /////////////////////////////////////////////////CREACIÓN DE UN BOTÓN
+        Button boton = new Button("Stop / Move");
+        boton.setDefaultButton(true);
+        boton.setLayoutX(15);
+        boton.setLayoutY(ALTO_ESCENA - (ALTO_BOTON +10 ));
+        boton.setPrefSize(LARGO_BOTON, ALTO_BOTON);
+        root.getChildren().add(boton);
+
+        
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -99,43 +104,39 @@ public class Aplicacion extends Application
         timeline.play();
         ventana.show();
 
-        
+        //////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ÉSTE ESTÁ ACTIVADO.
+        boton.setOnAction(event2 -> {
+                if (timeline.getStatus() == Status.PAUSED){
+                    timeline.play();
+                }
+                else{
+                    timeline.pause();
+                } 
+            });
 
         ////////////////////  para controlar AL CAZADOR con los botones de izquierda/derecha.
-        root.setOnKeyPressed(event2 ->{
-                if(event2.getCode() == KeyCode.RIGHT){
+
+        root.setOnKeyPressed(event ->{
+                if(event.getCode() == KeyCode.RIGHT){
                     cazador.cambiarDireccionDerecha(LARGO_ESCENA);
                 }
-                else if(event2.getCode() == KeyCode.LEFT){
+                else if(event.getCode() == KeyCode.LEFT){
                     cazador.cambiarDireccionIzquierda();
                 }
-                else if(event2.getCode() == KeyCode.UP){
+                else if(event.getCode() == KeyCode.UP){
                     cazador.cambiarDireccionArriba(ALTO_ESCENA);
                 }
-                else if(event2.getCode() == KeyCode.DOWN){
+                else if(event.getCode() == KeyCode.DOWN){
                     cazador.cambiarDireccionAbajo();
                 }
-                 else if(event2.getCode() == KeyCode.ENTER){
-                    // eliminarBola = true;
-                   // cazador.bolaCapturada(pelota) == true;
+                else if(event.getCode() == KeyCode.ENTER){
+                    if( cazador.capturadaPelota(pelota) != false ){
+                        root.getChildren().remove(pelota);
+                    }
                 }
-                
-                if(eliminarBola == true && cazador.bolaCapturada(pelota) == true){
-                root.getChildren().remove(pelota);
-            }
-
             });
-            
-            
+
     }
+
 }
-
-
-
-
-
-
-
-
-
 

@@ -85,7 +85,8 @@ public class Cazador extends Rectangle{
         }
     }
 
-    public boolean bolaCapturada(Pelota pelota ){
+    public boolean capturadaPelota(Pelota pelota ){
+        Shape c = Shape.intersect(this, pelota);
         boolean capturada = false;
         double cap_MaxX = getBoundsInParent().getMaxX();
         double cap_MinX = getBoundsInParent().getMinX();
@@ -96,15 +97,17 @@ public class Cazador extends Rectangle{
         double pelota_MinX = pelota.getBoundsInParent().getMinX();
         double pelota_MinY = pelota.getBoundsInParent().getMinY(); 
         double pelota_MaxY = pelota.getBoundsInParent().getMaxY();
-        if( pelota_MaxX <= cap_MaxX && pelota_MinX >= cap_MinX &&
-               pelota_MinY >= cac_MinY && pelota_MaxY <=  cac_MaxY){
-           
-                   capturada = true;
+
+        if(c.getBoundsInParent().getWidth() != -1){
+            if( pelota_MaxX <= cap_MaxX && pelota_MinX >= cap_MinX &&
+            pelota_MinY >= cac_MinY && pelota_MaxY <=  cac_MaxY){
+
+                capturada = true;
+            }
         }
         return capturada;
     }
 
 }
-
 
   
