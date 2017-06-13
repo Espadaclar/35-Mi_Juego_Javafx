@@ -64,8 +64,8 @@ public class Aplicacion_0 extends Application
     int POSICION_X_CAZADOR = LARGO_ESCENA /4;
     int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
 
-    int NUM_DE_BOLAS = 11;
-    int NUM_DE_ARBOLES = 22;
+    int NUM_DE_BOLAS = 10;
+    int NUM_DE_ARBOLES = 5;
 
     int RADIO = 15;
 
@@ -92,11 +92,13 @@ public class Aplicacion_0 extends Application
         Scene escena = new Scene(root, LARGO_ESCENA, ALTO_ESCENA, COLOR_ESCENA);//Se crea la escena con el contenedor que contiene los objetos.
         ventana.setScene(escena);//pasamos al parámetro ventana el objeto escena.
 
-        //SE CREA EL POLIGONO CAZADOR DE BOLITAS.
+        ////////////////////////////////////////////////////////////////////////////////SE CREA EL POLIGONO CAZADOR DE BOLITAS.
+
         Poligono cazador = new Poligono(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
 
-        //////////////////////////////////////////////////SE CREA UNA COLECCioN DE POLIGONOS ARBOL.
+        /////////////////////////////////////////////////////////////////////////////// *************COLECCioN DE POLIGONOS ARBOL.
+
         ArrayList<Poligono> arboles = new ArrayList<>();
         int coorDeX = LARGO_ESCENA /9 ;//------variable para determinar la coordenada de X.
         int acumCoorDeX = 0; 
@@ -110,7 +112,7 @@ public class Aplicacion_0 extends Application
                 coorDeY = ALTO_ESCENA - 300;
                 acumCoorDeX = 0;
             }
-            
+
             Poligono arbol = new Poligono(acumCoorDeX, coorDeY, 10, 100, Color.BLACK);
             acumCoorDeX += coorDeX;//----------acumula la medida de las coordenadas en X.
             arbol.setVisible(false);
@@ -118,7 +120,8 @@ public class Aplicacion_0 extends Application
             arboles.add(arbol);
         }
 
-        ///////////////////////////////////////////////// SE CREA UNA COLECCioN DE PELOTAS.
+        /////////////////////////////////////////////////////////////////////////////////////********* COLECCioN DE PELOTAS.
+
         ArrayList<Pelota> pelotas = new ArrayList<>();
         pelota =  new  Pelota( LARGO_ESCENA/2,ALTO_ESCENA/2, RADIO);
         for(int i = 0; i < NUM_DE_BOLAS ; i ++){
@@ -131,18 +134,20 @@ public class Aplicacion_0 extends Application
             root.getChildren().add(pelotas.get(i));
         }
 
-        //////////////////////////////////////SE CREA UN  CRONÓMETRO
+        /////////////////////////////////////////////////////////////////////////////////////////SE CREA UN  CRONÓMETRO
 
         Label tiempoPasado = new Label("0");  //-------------objeto Label para pasar como parametro.
         Objetos_De_Apollo miLabelCronometro = new Objetos_De_Apollo();//-Objetos_De_Apollo, hecha en este proyecto.
         miLabelCronometro.crearUnLabel(tiempoPasado, root,12, 25);//-------muestra cronometro  de descuento.
 
-        //SE CREA EL  CONTADOR DEL Nº DE  BOLITAS QUE SE VAN ELIMINANDO,       
+        ////////////////////////////////////////////////////SE CREA EL  CONTADOR DEL Nº DE  BOLITAS QUE SE VAN ELIMINANDO, ////     
+
         Label bolitasEliminadas = new Label();  //-------------objeto Label para pasar como parametro.
         Objetos_De_Apollo miLabelContador = new Objetos_De_Apollo();//-Objetos_De_Apollo, hecha en este proyecto.
         miLabelContador.crearUnLabel(bolitasEliminadas, root, 12, 60);//-------muestra el nº de bolitas eliminadas.
 
-        ////////////////////////////////////////// SE CREA UN BOTÓN
+        ////////////////////////////////////////////////////////////////////////////////// SE CREA UN BOTÓN
+
         Button boton = new Button("Stop / Move");
         boton.setDefaultButton(true);
         boton.setLayoutX(15);
@@ -155,7 +160,8 @@ public class Aplicacion_0 extends Application
         timeline.setAutoReverse(true);
         //define un valor de movimiento en los ejes x / y.
         KeyFrame kf = new KeyFrame(Duration.seconds(.004), new EventHandler<ActionEvent>() {
-                    ////// ---------VARIABLE PARA PERMITIR EL RECUENTO DE LAS BARRITAS QUE SE VAN ELIMINADO.
+
+                    ///////////////// ---------VARIABLE PARA PERMITIR EL RECUENTO DE LAS BARRITAS QUE SE VAN ELIMINADO.
                     int val = root.getChildren().size();
                     boolean sonidoDeCapturados = false;
                     public void handle(ActionEvent event) {
@@ -167,14 +173,14 @@ public class Aplicacion_0 extends Application
                         eliminados = ( val - (root.getChildren().size()) );///---- nº de bolitas eliminadas.
                         bolitasEliminadas.setText("Eliminadas  " +eliminados);
 
-                        // cada vez que se elimina una bolita aparece un arbol.
-                        if(eliminados < 18){
+                        ///////////////////////////////////////////////// cada vez que se elimina una bolita aparece un arbol.
+                        if(eliminados < NUM_DE_ARBOLES){
                             arboles.get(eliminados).setVisible(true);
                             arboles.get(0).setFill(COLOR_ESCENA);
                             arboles.get(0).setStroke(COLOR_ESCENA);
                         }
 
-                        // Actualizamos la etiqueta del tiempo
+                        ///////////////////////////////////////////////// Actualizamos la etiqueta del tiempo
                         int minutos = tiempoEnSegundos / 60;
                         int segundos = tiempoEnSegundos % 60;
                         tiempoPasado.setText(minutos + ":" + segundos);  
@@ -186,7 +192,8 @@ public class Aplicacion_0 extends Application
                             miLabelCronometro.crearUnLabel(finDelJuego, root,(LARGO_ESCENA /2) -100, ALTO_ESCENA /2);//-------muestra cronometro  de descuento.
                             finDelJuego.setText(" -- GANE  OVER -- ");
                         }
-                        //PARA QUE SE MUEVA EL CUADRADO CAZADOR .
+
+                        ////////////////////////////////////////////////////PARA QUE SE MUEVA EL CUADRADO CAZADOR .
                         cazador.mover(LARGO_ESCENA, ALTO_ESCENA);
 
                         for(Pelota pelota: pelotas){
@@ -198,76 +205,120 @@ public class Aplicacion_0 extends Application
                             }
                         }
 
-                    }
-                });
+                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        timeline.getKeyFrames().add(kf);
-        timeline.play();
-        ventana.show();
-        //////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ESTE ACTIVADO.
-        boton.setOnAction(event2 -> {
-                if (timeline.getStatus() == Status.PAUSED){
-                    timeline.play();
-                }
-                else{
-                    timeline.pause();
-                } 
-            });
+                        //PARA QUE REBOTEN LAS BOLAS AL COLISIONAR CON LAS BARRITAS.
+                        for(int i = 0; i < pelotas.size(); i ++ ){
+                            for(int a = 0; a < arboles.size(); a ++ ){
+                                Shape c = Shape.intersect(pelotas.get(i), arboles.get(a));
 
-        ////////////////////  para controlar AL CAZADOR con los botones de izquierda/derecha.
-        root.setOnKeyPressed(event2 ->{
-                if(event2.getCode() == KeyCode.RIGHT){
-                    cazador.cambiarDireccionDerecha(LARGO_ESCENA);
-                }
-                else if(event2.getCode() == KeyCode.LEFT){
-                    cazador.cambiarDireccionIzquierda();
-                }
+                                //COORDENADAS LATERALES DE CADA BARRITA Y DE LA BOLA.
+                                double longitud_Barrita = arboles.get(a).getWidth();
+                                double minimoDe_X_Barrita =  arboles.get(a).getBoundsInParent().getMinX();
+                                double maximo_X_Barrita =  minimoDe_X_Barrita + longitud_Barrita;
+                                double minimoDe_Y_Barrita = arboles.get(a).getBoundsInParent().getMinY();
+                                double maximoDe_Y_Barrita = arboles.get(a).getBoundsInParent().getMaxY();
 
-                else if(event2.getCode() == KeyCode.UP){
-                    cazador.cambiarDireccionArriba(ALTO_ESCENA);
-                }
-                else if(event2.getCode() == KeyCode.DOWN){
-                    cazador.cambiarDireccionAbajo();
-                }
-                else if(event2.getCode() == KeyCode.ENTER){
+                                double maximoDe_X_Bolita = pelotas.get(i).getBoundsInParent().getMaxX() -0.5;
+                                double minimoDe_X_Bolita =  pelotas.get(i).getBoundsInParent().getMinX() -0.5;
+                                double maximoDe_Y_Bolita = pelotas.get(i).getBoundsInParent().getMaxY() ;
+                                double minimoDe_Y_Bolita = pelotas.get(i).getBoundsInParent().getMinY() ;
 
-                    for(Pelota pelota: pelotas){
-                        if( cazador.capturadaPelota(pelota) == true ){
-                            root.getChildren().remove(pelota);
+                                if(c.getBoundsInParent().getWidth() != -1){
 
+                                    if( (maximoDe_X_Bolita ) == minimoDe_X_Barrita && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
+                                    minimoDe_Y_Bolita <= maximoDe_Y_Barrita ){
+                                        pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
+                                        //velocidadX = -velocidadX;                                  
+                                    }
+                                    //                                     else if( (maximoDe_X_Bolita +1) == minimoDe_X_Barrita && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
+                                    //                                     minimoDe_Y_Bolita <= maximoDe_Y_Barrita ){
+                                    //                                         pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
+                                    //                                         //velocidadX = -velocidadX;                                  
+                               //}
+                                else if( (minimoDe_X_Bolita ) == (minimoDe_X_Barrita + longitud_Barrita)
+                                && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
+                                minimoDe_Y_Bolita <= maximoDe_Y_Barrita){
+                                    pelotas.get(i).setVelocidad_X_APelota(+velocidadX);
+                                    //velocidadX = -velocidadX;
+                                }
+                                else{
+                                    pelotas.get(i).setVelocidad_Y_APelota(-velocidadY);
+                                    //velocidadY = -velocidadY;
+                                }
+
+                            }
                         }
                     }
+                }
+    });
+
+    timeline.getKeyFrames().add(kf);
+    timeline.play();
+    ventana.show();
+    ////////////////////////////////////////////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ESTE ACTIVADO.
+    boton.setOnAction(event2 -> {
+        if (timeline.getStatus() == Status.PAUSED){
+            timeline.play();
+        }
+        else{
+            timeline.pause();
+        } 
+    });
+
+    /////////////////////////////////////////////////////////  DA DIRECCION  AL CAZADOR CON LOS BOTONES  de izquierda/derecha.
+    root.setOnKeyPressed(event2 ->{
+        if(event2.getCode() == KeyCode.RIGHT){
+            cazador.cambiarDireccionDerecha(LARGO_ESCENA);
+        }
+        else if(event2.getCode() == KeyCode.LEFT){
+            cazador.cambiarDireccionIzquierda();
+        }
+
+        else if(event2.getCode() == KeyCode.UP){
+            cazador.cambiarDireccionArriba(ALTO_ESCENA);
+        }
+        else if(event2.getCode() == KeyCode.DOWN){
+            cazador.cambiarDireccionAbajo();
+        }
+        else if(event2.getCode() == KeyCode.ENTER){
+
+            for(Pelota pelota: pelotas){
+                if( cazador.capturadaPelota(pelota) == true ){
+                    root.getChildren().remove(pelota);
 
                 }
+            }
 
-            });
-        //---------- REALIZA UNA ACCION CADA UN Nº DETERMINADO DE MILISEGUNDOS.
-        TimerTask tarea = new TimerTask() {
-                @Override
-                public void run() {
-                    tiempoEnSegundos--;
-                    contDeTiempo ++;
-                }                        
-            };
+        }
 
-        Timer timer = new Timer();
-        timer.schedule(tarea, 0, 1000);
+    });
+    //---------- REALIZA UNA ACCION CADA UN Nº DETERMINADO DE MILISEGUNDOS.
+    TimerTask tarea = new TimerTask() {
+            @Override
+            public void run() {
+                tiempoEnSegundos--;
+                contDeTiempo ++;
+            }                        
+        };
 
-        //-----PARA QUE SUENE LA ALARMA CUANDO UNA PELOTA ES ATRAPADA POR EL CAZADOR.
+    Timer timer = new Timer();
+    timer.schedule(tarea, 0, 1000);
 
-        TimerTask tareaSonido = new TimerTask() {
-                @Override
-                public void run() {
+    //-----PARA QUE SUENE LA ALARMA CUANDO UNA PELOTA ES ATRAPADA POR EL CAZADOR.
 
-                    seCreaUnArbol = true;
+    TimerTask tareaSonido = new TimerTask() {
+            @Override
+            public void run() {
 
-                }                        
-            };
+                seCreaUnArbol = true;
 
-        Timer timerSonido = new Timer();
-        timer.schedule(tareaSonido, 0, 5000);
-    }
+            }                        
+        };
 
+    Timer timerSonido = new Timer();
+    timer.schedule(tareaSonido, 0, 5000);
 }
 
+}
 
