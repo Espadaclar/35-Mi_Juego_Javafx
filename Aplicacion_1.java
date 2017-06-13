@@ -45,20 +45,21 @@ public class Aplicacion_1 extends Application
     int LARGO_ESCENA = 800;
     int ALTO_ESCENA = 650;
 
-    int NUM_DE_BOLAS = 17;
-
-    int RADIO = 10;
-
     int LARGO_CAZADOR = (50) +15;
     int ALTO_CAZADOR = (50 ) +15;
     int POSICION_X_CAZADOR = LARGO_ESCENA /4;
     int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
+    
+    int NUM_DE_BOLAS = 17;
+
+    int RADIO = 10;
 
     int LARGO_BOTON = 80;
     int ALTO_BOTON = 5;
 
-    private int CONTADOR_TIEMPO = 1;
-    private int tiempoEnSegundos = 6;
+    private int contDeTiempo = 1;
+    //----- EL CRONOMETRO DEL JUEGO ES DESCENDENTE, EMPIEZA EN 'tiempoEnSegundos'.
+    private int tiempoEnSegundos = 66;
     private int numeroBolaEnescena = 0;
     private int eliminados = 0;
 
@@ -75,8 +76,11 @@ public class Aplicacion_1 extends Application
         ventana.setScene(escena);//pasamos al parámetro ventana el objeto escena.
 
         //SE CREA EL CAZADOR DE BOLITAS.
-        Cazador cazador = new Cazador(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
+        Poligono cazador = new Poligono(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
+        
+        Poligono arbol = new Poligono(20, 344, 10, 90, Color.GREEN);
+        root.getChildren().add(arbol);
 
         // SE CREA UNA COLECCioN DE PELOTAS.
         ArrayList<Pelota> pelotas = new ArrayList<>();
@@ -185,7 +189,7 @@ public class Aplicacion_1 extends Application
                 @Override
                 public void run() {
                     tiempoEnSegundos--;
-                    CONTADOR_TIEMPO ++;
+                    contDeTiempo ++;
                 }                        
             };
 

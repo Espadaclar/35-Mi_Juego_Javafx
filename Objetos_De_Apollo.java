@@ -23,7 +23,12 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaView;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.awt.Toolkit;
 
+import java.util.Timer;
+import java.util.TimerTask;
 /**
  * Write a description of class Objetos_De_Apollo here.
  * 
@@ -53,10 +58,16 @@ public class Objetos_De_Apollo
         nuevoLabel.setStyle("-fx-font-size: 2em;");
         root.getChildren().add( nuevoLabel);
     }
+    
+    public void sonido(){
+        TimerTask tareaSonido = new TimerTask() {
+                @Override
+                public void run() {
+                    Toolkit.getDefaultToolkit().beep();
+                }                        
+            };
 
-
+        Timer timerSonido = new Timer();
+        timerSonido.schedule(tareaSonido, 0, 100);
+    }
 }
-
-
-
-
