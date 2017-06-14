@@ -68,6 +68,27 @@ public class Pelota extends Circle{
         return valor;
     }
 
+    public int moverHorizontal(){
+        int val = 1;
+        if( velocidadEnX == -1){
+            val = -1;
+        }
+        return val;
+    }
+    public int moverVertical(){
+        int val = 1;
+        if( velocidadEnY == -1){
+            val = -1;
+        }
+        return val;
+    }
+    public int getDireccionX(){
+        return velocidadEnX;
+    }
+    public int getDireccionY(){
+        return velocidadEnY;
+    }
+    
     /**
      * imprescindible para variar la velocidad de la bola cuando sea necesario en la clase Rectangulo
      */

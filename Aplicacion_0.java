@@ -50,7 +50,7 @@ public class Aplicacion_0 extends Application
     private int velocidadEnBarraX;
     private int velocidadEnBarraY;
     private  Pelota pelota;
-    
+
     private int contDeTiempo = 1;
     //----- EL CRONOMETRO DEL JUEGO ES DESCENDENTE, EMPIEZA EN 'tiempoEnSegundos'.
     private int tiempoEnSegundos = 966;
@@ -74,18 +74,13 @@ public class Aplicacion_0 extends Application
     int ALTO_BOTON = 5;
     int POSICION_X_CAZADOR = LARGO_ESCENA /4;
     int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
-    
-    int NUM_DE_BOLAS = 10;
-    int NUM_DE_ARBOLES = 4;
+
+    int NUM_DE_BOLAS = 20;
+    int NUM_DE_ARBOLES = 20;
 
     int RADIO = 15;
 
-    
-
-    
-
     public static void main(String[] args){
-
         //Esto se utiliza para ejecutar la aplicación 
         //es como el new Contructor()
         launch(args);
@@ -98,37 +93,44 @@ public class Aplicacion_0 extends Application
         Scene escena = new Scene(root, LARGO_ESCENA, ALTO_ESCENA, COLOR_ESCENA);//Se crea la escena con el contenedor que contiene los objetos.
         ventana.setScene(escena);//pasamos al parámetro ventana el objeto escena.
 
-        ////////////////////////////////////////////////////////////////////////////////SE CREA EL POLIGONO CAZADOR DE BOLITAS.
+        ////////////////////////////////////////////////////////////////////////////////***********************************      SE CREA EL POLIGONO CAZADOR DE BOLITAS.
 
         Poligono cazador = new Poligono(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
 
-        /////////////////////////////////////////////////////////////////////////////// *************COLECCioN DE POLIGONOS ARBOL.
+        /////////////////////////////////////////////////////////////////////////////// ***************************************        COLECCioN DE POLIGONOS ARBOL.
 
         ArrayList<Poligono> arboles = new ArrayList<>();
         int coorDeX = LARGO_ESCENA /9 ;//------variable para determinar la coordenada de X.
-        int acumCoorDeX = 0; 
+        int aux = coorDeX;
+        int aux2 = coorDeX;
+        int acumCoorDeX = 0;
+        int coorDeY = (ALTO_ESCENA - 150);
         for(int i = 0; i < NUM_DE_ARBOLES ; i ++){
-            int coorDeY = (ALTO_ESCENA - 150);
-            if(i >= 18){
-                coorDeY = ALTO_ESCENA - 450;
-                acumCoorDeX = 0;
-            }
-            else if(i >= 9 && i < 18){
-                coorDeY = ALTO_ESCENA - 300;
-                acumCoorDeX = 0;
-            }
 
-            //Poligono arbol = new Poligono(50, 200, 200, 50, Color.BLACK);
+            //Poligono arbol = new Poligono(200, 200, 200, 450 , Color.BLACK);
             Poligono arbol = new Poligono(acumCoorDeX, coorDeY, 10, 100, Color.BLACK);
-            acumCoorDeX += coorDeX;//----------acumula la medida de las coordenadas en X.
+            
             arbol.setVisible(false);
             root.getChildren().add(arbol);
             arboles.add(arbol);
+            
+            if(i < 9 ){
+                acumCoorDeX += coorDeX;//----------acumula la medida de las coordenadas en X.
+            }
+            else if(i >= 18){
+                coorDeY = ALTO_ESCENA - 450;
+                acumCoorDeX += aux2 ;
+                aux2 += coorDeX;
+            }
+            else if(i > 9 && i < 18){    
+                coorDeY = ALTO_ESCENA - 300;
+                acumCoorDeX = aux ;
+                aux += coorDeX;
+            }
+
         }
-
         /////////////////////////////////////////////////////////////////////////////////////********* COLECCioN DE PELOTAS.
-
         ArrayList<Pelota> pelotas = new ArrayList<>();
         pelota =  new  Pelota( LARGO_ESCENA/2,ALTO_ESCENA/2, RADIO);
         for(int i = 0; i < NUM_DE_BOLAS ; i ++){
@@ -166,7 +168,7 @@ public class Aplicacion_0 extends Application
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.setAutoReverse(true);
         //define un valor de movimiento en los ejes x / y.
-        KeyFrame kf = new KeyFrame(Duration.seconds(.002), new EventHandler<ActionEvent>() {
+        KeyFrame kf = new KeyFrame(Duration.seconds(.005), new EventHandler<ActionEvent>() {
 
                     ///////////////// ---------VARIABLE PARA PERMITIR EL RECUENTO DE LAS BARRITAS QUE SE VAN ELIMINADO.
                     int val = root.getChildren().size();
@@ -221,48 +223,41 @@ public class Aplicacion_0 extends Application
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                         //PARA QUE REBOTEN LAS BOLAS AL COLISIONAR CON LAS BARRITAS.
-                        for(int i = 0; i < pelotas.size(); i ++ ){
-                            for(int a = 0; a < arboles.size(); a ++ ){
-                                Shape c = Shape.intersect(pelotas.get(i), arboles.get(a));
+                        //for(int i = 0; i < pelotas.size(); i ++ ){
+                        // for(int a = 0; a < arboles.size(); a ++ ){
 
-                                //COORDENADAS LATERALES DE CADA BARRITA Y DE LA BOLA.
-                                double longitud_Barrita = arboles.get(a).getWidth();
-                                double minimoDe_X_Barrita =  arboles.get(a).getBoundsInParent().getMinX();
-                                double maximo_X_Barrita =  minimoDe_X_Barrita + longitud_Barrita;
-                                double minimoDe_Y_Barrita = arboles.get(a).getBoundsInParent().getMinY();
-                                double maximoDe_Y_Barrita = arboles.get(a).getBoundsInParent().getMaxY();
+                        //                                 double MinX_Pelota =  pelotas.get(i).getBoundsInParent().getMinX() -0.5;
+                        //                                 double MinY_Pelota = pelotas.get(i).getBoundsInParent().getMinY() ;
+                        //                                 double MaxX_Pelota = pelotas.get(i).getBoundsInParent().getMaxX() -0.5;
+                        //                                 double MaxY_Pelota = pelotas.get(i).getBoundsInParent().getMaxY() ;
+                        // 
+                        //                                 double MinX_Arbol =  arboles.get(a).getBoundsInParent().getMinX();
+                        //                                 double MinY_Arbol = arboles.get(a).getBoundsInParent().getMinY();
+                        //                                 double MaxX_Arbol = arboles.get(a).getBoundsInParent().getMaxX();                                
+                        //                                 double MaxY_Arbol =  arboles.get(a).getBoundsInParent().getMaxY();
+                        // 
+                        //                                 System.out.println("MinX_Pelota- " +MinX_Pelota+ " MaxX_Arbol " +MaxX_Arbol+ " MaxY_Pelota " +MaxY_Pelota+ " MinY_Arbol " +MinY_Arbol);
+                        //                                 System.out.println("/-------------------");
 
-                                double maximoDe_X_Bolita = pelotas.get(i).getBoundsInParent().getMaxX() ;//-0.5;
-                                double minimoDe_X_Bolita =  pelotas.get(i).getBoundsInParent().getMinX() ;//-0.5;
-                                double maximoDe_Y_Bolita = pelotas.get(i).getBoundsInParent().getMaxY() ;
-                                double minimoDe_Y_Bolita = pelotas.get(i).getBoundsInParent().getMinY() ;
+                        //                                 if( MaxX_Pelota >= MinX_Arbol && (MinY_Pelota + RADIO) > MinY_Arbol &&
+                        //                                 (MaxY_Pelota - RADIO) <= MaxY_Arbol)  {                                    
+                        //                                     pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
+                        //                                 }
+                        //                                 else if( MinX_Pelota  >= MaxX_Arbol && (MinY_Pelota + RADIO) > MinY_Arbol &&
+                        //                                 (MaxY_Pelota - RADIO) < MaxY_Arbol && velocidadX == -1)  {                                    
+                        //                                     pelotas.get(i).setVelocidad_X_APelota(velocidadX);
+                        //                                 }
+                        //                                 else if( MinY_Pelota == MaxY_Arbol && (MinX_Pelota + RADIO) > MinX_Arbol &&
+                        //                                 (MaxX_Pelota - RADIO) < MaxX_Arbol)  {                                    
+                        //                                     pelotas.get(i).setVelocidad_Y_APelota(velocidadY);
+                        //                                 }
+                        //                                 else if( MaxY_Pelota == MinY_Arbol && (MaxX_Pelota - RADIO) < MaxX_Arbol &&
+                        //                                 (MinX_Pelota + RADIO > MinX_Arbol ) ) {                                         
+                        //                                     pelotas.get(i).setVelocidad_Y_APelota(-velocidadY);
+                        //                                 }
 
-                                if(c.getBoundsInParent().getWidth() != -1){
-
-                                    if( (maximoDe_X_Bolita ) == minimoDe_X_Barrita && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
-                                    minimoDe_Y_Bolita <= maximoDe_Y_Barrita ){
-                                        pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
-                                        //velocidadX = -velocidadX;                                  
-                                    }
-                                    else if( (maximoDe_X_Bolita +1) == minimoDe_X_Barrita && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
-                                    minimoDe_Y_Bolita <= maximoDe_Y_Barrita ){
-                                        pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
-                                        //velocidadX = -velocidadX;                                  
-                                    }
-                                    else if( (minimoDe_X_Bolita ) == (minimoDe_X_Barrita + longitud_Barrita)
-                                    && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
-                                    minimoDe_Y_Bolita <= maximoDe_Y_Barrita){
-                                        pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
-                                        //velocidadX = -velocidadX;
-                                    }
-                                    else{
-                                        pelotas.get(i).setVelocidad_Y_APelota(-velocidadY);
-                                        //velocidadY = -velocidadY;
-                                    }
-
-                                }
-                            }
-                        }
+                        //}
+                        // }
                     }
                 });
 
