@@ -65,7 +65,7 @@ public class Aplicacion_0 extends Application
     int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
 
     int NUM_DE_BOLAS = 10;
-    int NUM_DE_ARBOLES = 5;
+    int NUM_DE_ARBOLES = 9;
 
     int RADIO = 15;
 
@@ -77,6 +77,10 @@ public class Aplicacion_0 extends Application
     private int tiempoEnSegundos = 966;
     private int numeroBolaEnescena = 0;
     private int eliminados = 0;
+
+    // MECANISMO DE CORRECCIÓN,( para que aparezca un arbol cada vez que desaparece una bolita.)
+    private int corrector_1 = -1;
+    private int corrector_0 = -1;
 
     public static void main(String[] args){
 
@@ -170,15 +174,21 @@ public class Aplicacion_0 extends Application
                             pelotas.get(i).mover(LARGO_ESCENA, ALTO_ESCENA);                           
                         }
 
+                        ///////////////////////////////////////////////// cada vez que se elimina una bolita aparece un arbol.
+                        //if(eliminados < NUM_DE_ARBOLES && eliminados > 0){
+
+                        if(eliminados > corrector_0){
+                            corrector_1 ++;
+                            corrector_0 = eliminados;
+                        }
+
                         eliminados = ( val - (root.getChildren().size()) );///---- nº de bolitas eliminadas.
                         bolitasEliminadas.setText("Eliminadas  " +eliminados);
 
-                        ///////////////////////////////////////////////// cada vez que se elimina una bolita aparece un arbol.
-                        if(eliminados < NUM_DE_ARBOLES){
-                            arboles.get(eliminados).setVisible(true);
-                            arboles.get(0).setFill(COLOR_ESCENA);
-                            arboles.get(0).setStroke(COLOR_ESCENA);
-                        }
+                        arboles.get(corrector_1).setVisible(true);
+                        arboles.get(0).setFill(COLOR_ESCENA);
+                        arboles.get(0).setStroke(COLOR_ESCENA);
+                        // }
 
                         ///////////////////////////////////////////////// Actualizamos la etiqueta del tiempo
                         int minutos = tiempoEnSegundos / 60;
@@ -219,8 +229,8 @@ public class Aplicacion_0 extends Application
                                 double minimoDe_Y_Barrita = arboles.get(a).getBoundsInParent().getMinY();
                                 double maximoDe_Y_Barrita = arboles.get(a).getBoundsInParent().getMaxY();
 
-                                double maximoDe_X_Bolita = pelotas.get(i).getBoundsInParent().getMaxX() -0.5;
-                                double minimoDe_X_Bolita =  pelotas.get(i).getBoundsInParent().getMinX() -0.5;
+                                double maximoDe_X_Bolita = pelotas.get(i).getBoundsInParent().getMaxX() ;//-0.5;
+                                double minimoDe_X_Bolita =  pelotas.get(i).getBoundsInParent().getMinX() ;//-0.5;
                                 double maximoDe_Y_Bolita = pelotas.get(i).getBoundsInParent().getMaxY() ;
                                 double minimoDe_Y_Bolita = pelotas.get(i).getBoundsInParent().getMinY() ;
 
@@ -231,94 +241,96 @@ public class Aplicacion_0 extends Application
                                         pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
                                         //velocidadX = -velocidadX;                                  
                                     }
-                                    //                                     else if( (maximoDe_X_Bolita +1) == minimoDe_X_Barrita && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
-                                    //                                     minimoDe_Y_Bolita <= maximoDe_Y_Barrita ){
-                                    //                                         pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
-                                    //                                         //velocidadX = -velocidadX;                                  
-                               //}
-                                else if( (minimoDe_X_Bolita ) == (minimoDe_X_Barrita + longitud_Barrita)
-                                && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
-                                minimoDe_Y_Bolita <= maximoDe_Y_Barrita){
-                                    pelotas.get(i).setVelocidad_X_APelota(+velocidadX);
-                                    //velocidadX = -velocidadX;
-                                }
-                                else{
-                                    pelotas.get(i).setVelocidad_Y_APelota(-velocidadY);
-                                    //velocidadY = -velocidadY;
-                                }
+                                    else if( (maximoDe_X_Bolita +1) == minimoDe_X_Barrita && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
+                                    minimoDe_Y_Bolita <= maximoDe_Y_Barrita ){
+                                        pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
+                                        //velocidadX = -velocidadX;                                  
+                                    }
+                                    else if( (minimoDe_X_Bolita ) == (minimoDe_X_Barrita + longitud_Barrita)
+                                    && maximoDe_Y_Bolita >= minimoDe_Y_Barrita &&
+                                    minimoDe_Y_Bolita <= maximoDe_Y_Barrita){
+                                        pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
+                                        //velocidadX = -velocidadX;
+                                    }
+                                    else{
+                                        pelotas.get(i).setVelocidad_Y_APelota(-velocidadY);
+                                        //velocidadY = -velocidadY;
+                                    }
 
+                                }
                             }
                         }
                     }
+                });
+
+        timeline.getKeyFrames().add(kf);
+        timeline.play();
+        ventana.show();
+        ////////////////////////////////////////////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ESTE ACTIVADO.
+        boton.setOnAction(event2 -> {
+                if (timeline.getStatus() == Status.PAUSED){
+                    timeline.play();
                 }
-    });
+                else{
+                    timeline.pause();
+                } 
+            });
 
-    timeline.getKeyFrames().add(kf);
-    timeline.play();
-    ventana.show();
-    ////////////////////////////////////////////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ESTE ACTIVADO.
-    boton.setOnAction(event2 -> {
-        if (timeline.getStatus() == Status.PAUSED){
-            timeline.play();
-        }
-        else{
-            timeline.pause();
-        } 
-    });
+        /////////////////////////////////////////////////////////  DA DIRECCION  AL CAZADOR CON LOS BOTONES  de izquierda/derecha.
+        root.setOnKeyPressed(event2 ->{
+                if(event2.getCode() == KeyCode.RIGHT){
+                    cazador.cambiarDireccionDerecha(LARGO_ESCENA);
+                }
+                else if(event2.getCode() == KeyCode.LEFT){
+                    cazador.cambiarDireccionIzquierda();
+                }
 
-    /////////////////////////////////////////////////////////  DA DIRECCION  AL CAZADOR CON LOS BOTONES  de izquierda/derecha.
-    root.setOnKeyPressed(event2 ->{
-        if(event2.getCode() == KeyCode.RIGHT){
-            cazador.cambiarDireccionDerecha(LARGO_ESCENA);
-        }
-        else if(event2.getCode() == KeyCode.LEFT){
-            cazador.cambiarDireccionIzquierda();
-        }
+                else if(event2.getCode() == KeyCode.UP){
+                    cazador.cambiarDireccionArriba(ALTO_ESCENA);
+                }
+                else if(event2.getCode() == KeyCode.DOWN){
+                    cazador.cambiarDireccionAbajo();
+                }
+                else if(event2.getCode() == KeyCode.ENTER){
 
-        else if(event2.getCode() == KeyCode.UP){
-            cazador.cambiarDireccionArriba(ALTO_ESCENA);
-        }
-        else if(event2.getCode() == KeyCode.DOWN){
-            cazador.cambiarDireccionAbajo();
-        }
-        else if(event2.getCode() == KeyCode.ENTER){
+                    for(int i = 0; i < pelotas.size(); i ++){
+                        //for(Pelota pelota: pelotas){
+                        if( cazador.capturadaPelota(pelotas.get(i)) == true ){
+                            root.getChildren().remove(pelotas.get(i));
+                            //root.getChildren().remove(pelota);
 
-            for(Pelota pelota: pelotas){
-                if( cazador.capturadaPelota(pelota) == true ){
-                    root.getChildren().remove(pelota);
+                        }
+                    }
 
                 }
-            }
 
-        }
+            });
+        //---------- REALIZA UNA ACCION CADA UN Nº DETERMINADO DE MILISEGUNDOS.
+        TimerTask tarea = new TimerTask() {
+                @Override
+                public void run() {
+                    tiempoEnSegundos--;
+                    contDeTiempo ++;
+                }                        
+            };
 
-    });
-    //---------- REALIZA UNA ACCION CADA UN Nº DETERMINADO DE MILISEGUNDOS.
-    TimerTask tarea = new TimerTask() {
-            @Override
-            public void run() {
-                tiempoEnSegundos--;
-                contDeTiempo ++;
-            }                        
-        };
+        Timer timer = new Timer();
+        timer.schedule(tarea, 0, 1000);
 
-    Timer timer = new Timer();
-    timer.schedule(tarea, 0, 1000);
+        //-----PARA QUE SUENE LA ALARMA CUANDO UNA PELOTA ES ATRAPADA POR EL CAZADOR.
 
-    //-----PARA QUE SUENE LA ALARMA CUANDO UNA PELOTA ES ATRAPADA POR EL CAZADOR.
+        TimerTask tareaSonido = new TimerTask() {
+                @Override
+                public void run() {
 
-    TimerTask tareaSonido = new TimerTask() {
-            @Override
-            public void run() {
+                    seCreaUnArbol = true;
 
-                seCreaUnArbol = true;
+                }                        
+            };
 
-            }                        
-        };
-
-    Timer timerSonido = new Timer();
-    timer.schedule(tareaSonido, 0, 5000);
-}
+        Timer timerSonido = new Timer();
+        timer.schedule(tareaSonido, 0, 5000);
+    }
 
 }
 
