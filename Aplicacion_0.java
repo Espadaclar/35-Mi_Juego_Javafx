@@ -240,20 +240,31 @@ public class Aplicacion_0 extends Application
                             //                             (MaxY_Cazador ) <= MaxY_Arbol)  {                                    
                             //                                 cazador.cambiarDireccionIzquierda();
                             //                             }
-                            //                             else if( MinX_Cazador  >= MaxX_Arbol && (MinY_Cazador) > MinY_Arbol &&
-                            //                             (MaxY_Cazador) < MaxY_Arbol && velocidadX == -1)  {                                    
+
+                            //                             if( MinX_Cazador  >= MaxX_Arbol && (MinY_Cazador) > MaxY_Arbol &&
+                            //                             (MaxY_Cazador) > MinY_Arbol)  {                                    
                             //                                 cazador.cambiarDireccionDerecha(LARGO_ESCENA);
                             //                             }
-                            //                             else if( MinY_Cazador == MaxY_Arbol && (MinX_Cazador) > MinX_Arbol &&
-                            //                             (MaxX_Cazador ) < MaxX_Arbol)  {                                    
+                            //                             
+                            //                             else if( MinY_Cazador == MaxY_Arbol && (MinX_Cazador) < MaxX_Arbol &&
+                            //                             (MaxX_Cazador ) > MinX_Arbol)  {                                    
                             //                                 cazador.cambiarDireccionAbajo();
                             //                             }
+                            //                             //                             else 
                             //                             else 
                             if( MaxY_Cazador == MinY_Arbol &&  MaxX_Cazador  > MinX_Arbol &&
-                            (MinX_Cazador  < MaxX_Arbol ) ) {                                         
+                            (MinX_Cazador  < MaxX_Arbol ) ) {    
+                                Random aleatorio = new Random();
+                                Color color = new Color(aleatorio.nextDouble(), aleatorio.nextDouble(), aleatorio.nextDouble(), aleatorio.nextDouble());
+                                if(color == COLOR_ESCENA ){
+                                    color = Color.GREEN;
+                                }
+                                else if(color == Color.BLACK){
+                                     color = Color.GREEN;
+                                }
                                 cazador.cambiarDireccionArriba(ALTO_ESCENA);
+                                arboles.get(a).setFill(color);
                             }
-                            
 
                         }
                         // }
