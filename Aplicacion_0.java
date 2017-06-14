@@ -110,11 +110,11 @@ public class Aplicacion_0 extends Application
 
             //Poligono arbol = new Poligono(200, 200, 200, 450 , Color.BLACK);
             Poligono arbol = new Poligono(acumCoorDeX, coorDeY, 10, 100, Color.BLACK);
-            
+
             arbol.setVisible(false);
             root.getChildren().add(arbol);
             arboles.add(arbol);
-            
+
             if(i < 9 ){
                 acumCoorDeX += coorDeX;//----------acumula la medida de las coordenadas en X.
             }
@@ -224,39 +224,38 @@ public class Aplicacion_0 extends Application
 
                         //PARA QUE REBOTEN LAS BOLAS AL COLISIONAR CON LAS BARRITAS.
                         //for(int i = 0; i < pelotas.size(); i ++ ){
-                        // for(int a = 0; a < arboles.size(); a ++ ){
+                        for(int a = 0; a < arboles.size(); a ++ ){
 
-                        //                                 double MinX_Pelota =  pelotas.get(i).getBoundsInParent().getMinX() -0.5;
-                        //                                 double MinY_Pelota = pelotas.get(i).getBoundsInParent().getMinY() ;
-                        //                                 double MaxX_Pelota = pelotas.get(i).getBoundsInParent().getMaxX() -0.5;
-                        //                                 double MaxY_Pelota = pelotas.get(i).getBoundsInParent().getMaxY() ;
-                        // 
-                        //                                 double MinX_Arbol =  arboles.get(a).getBoundsInParent().getMinX();
-                        //                                 double MinY_Arbol = arboles.get(a).getBoundsInParent().getMinY();
-                        //                                 double MaxX_Arbol = arboles.get(a).getBoundsInParent().getMaxX();                                
-                        //                                 double MaxY_Arbol =  arboles.get(a).getBoundsInParent().getMaxY();
-                        // 
-                        //                                 System.out.println("MinX_Pelota- " +MinX_Pelota+ " MaxX_Arbol " +MaxX_Arbol+ " MaxY_Pelota " +MaxY_Pelota+ " MinY_Arbol " +MinY_Arbol);
-                        //                                 System.out.println("/-------------------");
+                            double MinX_Cazador =  cazador.getBoundsInParent().getMinX() -0.5;
+                            double MinY_Cazador = cazador.getBoundsInParent().getMinY() ;
+                            double MaxX_Cazador = cazador.getBoundsInParent().getMaxX() -0.5;
+                            double MaxY_Cazador = cazador.getBoundsInParent().getMaxY() ;
 
-                        //                                 if( MaxX_Pelota >= MinX_Arbol && (MinY_Pelota + RADIO) > MinY_Arbol &&
-                        //                                 (MaxY_Pelota - RADIO) <= MaxY_Arbol)  {                                    
-                        //                                     pelotas.get(i).setVelocidad_X_APelota(-velocidadX);
-                        //                                 }
-                        //                                 else if( MinX_Pelota  >= MaxX_Arbol && (MinY_Pelota + RADIO) > MinY_Arbol &&
-                        //                                 (MaxY_Pelota - RADIO) < MaxY_Arbol && velocidadX == -1)  {                                    
-                        //                                     pelotas.get(i).setVelocidad_X_APelota(velocidadX);
-                        //                                 }
-                        //                                 else if( MinY_Pelota == MaxY_Arbol && (MinX_Pelota + RADIO) > MinX_Arbol &&
-                        //                                 (MaxX_Pelota - RADIO) < MaxX_Arbol)  {                                    
-                        //                                     pelotas.get(i).setVelocidad_Y_APelota(velocidadY);
-                        //                                 }
-                        //                                 else if( MaxY_Pelota == MinY_Arbol && (MaxX_Pelota - RADIO) < MaxX_Arbol &&
-                        //                                 (MinX_Pelota + RADIO > MinX_Arbol ) ) {                                         
-                        //                                     pelotas.get(i).setVelocidad_Y_APelota(-velocidadY);
-                        //                                 }
+                            double MinX_Arbol =  arboles.get(a).getBoundsInParent().getMinX();
+                            double MinY_Arbol = arboles.get(a).getBoundsInParent().getMinY();
+                            double MaxX_Arbol = arboles.get(a).getBoundsInParent().getMaxX();                                
+                            double MaxY_Arbol =  arboles.get(a).getBoundsInParent().getMaxY();
 
-                        //}
+                            //                             if( MaxX_Cazador >= MinX_Arbol && (MinY_Cazador ) > MinY_Arbol &&
+                            //                             (MaxY_Cazador ) <= MaxY_Arbol)  {                                    
+                            //                                 cazador.cambiarDireccionIzquierda();
+                            //                             }
+                            //                             else if( MinX_Cazador  >= MaxX_Arbol && (MinY_Cazador) > MinY_Arbol &&
+                            //                             (MaxY_Cazador) < MaxY_Arbol && velocidadX == -1)  {                                    
+                            //                                 cazador.cambiarDireccionDerecha(LARGO_ESCENA);
+                            //                             }
+                            //                             else if( MinY_Cazador == MaxY_Arbol && (MinX_Cazador) > MinX_Arbol &&
+                            //                             (MaxX_Cazador ) < MaxX_Arbol)  {                                    
+                            //                                 cazador.cambiarDireccionAbajo();
+                            //                             }
+                            //                             else 
+                            if( MaxY_Cazador == MinY_Arbol &&  MaxX_Cazador  > MinX_Arbol &&
+                            (MinX_Cazador  < MaxX_Arbol ) ) {                                         
+                                cazador.cambiarDireccionArriba(ALTO_ESCENA);
+                            }
+                            
+
+                        }
                         // }
                     }
                 });
