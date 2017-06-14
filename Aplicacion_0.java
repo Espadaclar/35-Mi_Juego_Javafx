@@ -30,14 +30,10 @@ import javafx.scene.shape.Shape;
 
 import java.lang.Object;
 import javafx.scene.Node;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.Polygon;
+import java.util.ArrayList;
 
 /**
- * Write a description of class Circulo here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * franciscoJavier
  */
 public class Aplicacion_0 extends Application 
 {
@@ -56,6 +52,8 @@ public class Aplicacion_0 extends Application
     private int tiempoEnSegundos = 966;
     private int numeroBolaEnescena = 0;
     private int eliminados = 0;
+
+    private int[] conColor;
 
     // MECANISMO DE CORRECCIÓN,( para que aparezca un arbol cada vez que desaparece una bolita.)
     private int corrector_1 = -1;
@@ -98,37 +96,33 @@ public class Aplicacion_0 extends Application
         Poligono cazador = new Poligono(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
 
-        /////////////////////////////////////////////////////////////////////////////// ***************************************        COLECCioN DE POLIGONOS ARBOL.
+         /////////////////////////////////////////////////////////////////////////////// *******************     COLECCioN DE POLIGONOS ARBOL.
 
         ArrayList<Poligono> arboles = new ArrayList<>();
-        int coorDeX = LARGO_ESCENA /9 ;//------variable para determinar la coordenada de X.
+        int coorDeX = LARGO_ESCENA /10 ;//------variable para determinar la coordenada de X.
         int aux = coorDeX;
         int aux2 = coorDeX;
-        int acumCoorDeX = 0;
+        int acumCoorDeX = 0;  //--------------- variable final para coordenada X de todos los arboles.
         int coorDeY = (ALTO_ESCENA - 150);
-        for(int i = 0; i < NUM_DE_ARBOLES ; i ++){
-
-            //Poligono arbol = new Poligono(200, 200, 200, 450 , Color.BLACK);
-            Poligono arbol = new Poligono(acumCoorDeX, coorDeY, 10, 100, Color.BLACK);
-
-            arbol.setVisible(false);
-            root.getChildren().add(arbol);
-            arboles.add(arbol);
-
+        for(int i = 0; i < NUM_DE_ARBOLES ; i ++){            
             if(i < 9 ){
-                acumCoorDeX += coorDeX;//----------acumula la medida de las coordenadas en X.
+                acumCoorDeX += coorDeX;
             }
             else if(i >= 18){
                 coorDeY = ALTO_ESCENA - 450;
-                acumCoorDeX += aux2 ;
+                acumCoorDeX = aux2 ;
                 aux2 += coorDeX;
             }
-            else if(i > 9 && i < 18){    
+            else if(i >= 9 && i < 18){    
                 coorDeY = ALTO_ESCENA - 300;
                 acumCoorDeX = aux ;
                 aux += coorDeX;
             }
+            Poligono arbol = new Poligono(acumCoorDeX, coorDeY, 10, 100, Color.BLACK);
 
+            // arbol.setVisible(false);
+            root.getChildren().add(arbol);
+            arboles.add(arbol);
         }
         /////////////////////////////////////////////////////////////////////////////////////********* COLECCioN DE PELOTAS.
         ArrayList<Pelota> pelotas = new ArrayList<>();
@@ -180,7 +174,6 @@ public class Aplicacion_0 extends Application
                         }
 
                         ///////////////////////////////////////////////// cada vez que se elimina una bolita aparece un arbol.
-
                         if(eliminados > corrector_0){
                             corrector_1 ++;
                             corrector_0 = eliminados;
@@ -189,9 +182,8 @@ public class Aplicacion_0 extends Application
                         bolitasEliminadas.setText("Eliminadas  " +eliminados);
 
                         if(corrector_1 < NUM_DE_ARBOLES ){
-
                             arboles.get(corrector_1).setVisible(true);
-                            arboles.get(0).setFill(COLOR_ESCENA);
+                           // arboles.get(0).setFill(COLOR_ESCENA);
                             arboles.get(0).setStroke(COLOR_ESCENA);
                         }
 
@@ -236,34 +228,36 @@ public class Aplicacion_0 extends Application
                             double MaxX_Arbol = arboles.get(a).getBoundsInParent().getMaxX();                                
                             double MaxY_Arbol =  arboles.get(a).getBoundsInParent().getMaxY();
 
-                            //                             if( MaxX_Cazador >= MinX_Arbol && (MinY_Cazador ) > MinY_Arbol &&
-                            //                             (MaxY_Cazador ) <= MaxY_Arbol)  {                                    
-                            //                                 cazador.cambiarDireccionIzquierda();
-                            //                             }
-
-                            //                             if( MinX_Cazador  >= MaxX_Arbol && (MinY_Cazador) > MaxY_Arbol &&
-                            //                             (MaxY_Cazador) > MinY_Arbol)  {                                    
-                            //                                 cazador.cambiarDireccionDerecha(LARGO_ESCENA);
-                            //                             }
-                            //                             
-                            //                             else if( MinY_Cazador == MaxY_Arbol && (MinX_Cazador) < MaxX_Arbol &&
-                            //                             (MaxX_Cazador ) > MinX_Arbol)  {                                    
-                            //                                 cazador.cambiarDireccionAbajo();
-                            //                             }
-                            //                             //                             else 
-                            //                             else 
+                            //// EL CAZADOR REBOTA AL CHOCAR EN LA COPA DE LOS ARBOLES Y CAMBIAN DE COLOR.
                             if( MaxY_Cazador == MinY_Arbol &&  MaxX_Cazador  > MinX_Arbol &&
-                            (MinX_Cazador  < MaxX_Arbol ) ) {    
+                            (MinX_Cazador  < MaxX_Arbol ) ) {  
+
                                 Random aleatorio = new Random();
                                 Color color = new Color(aleatorio.nextDouble(), aleatorio.nextDouble(), aleatorio.nextDouble(), aleatorio.nextDouble());
                                 if(color == COLOR_ESCENA ){
                                     color = Color.GREEN;
                                 }
                                 else if(color == Color.BLACK){
-                                     color = Color.GREEN;
+                                    color = Color.GREEN;
                                 }
                                 cazador.cambiarDireccionArriba(ALTO_ESCENA);
-                                arboles.get(a).setFill(color);
+                                arboles.get(a).setFill(color); 
+
+                                //////TRATA DE PONER ROJO AL ARBOL EN EL 2º GOLPE, Y ELIMINARLO AL 3º.
+                                conColor = new int[NUM_DE_ARBOLES]; 
+                                conColor[a] = conColor[a] +1; 
+                                for(int i = 0; i < NUM_DE_ARBOLES; i ++){
+                                    if(conColor[i] == 2){
+                                        arboles.get(i).setFill(Color.RED);
+                                    }
+                                    else if(conColor[i] == 3){
+                                        root.getChildren().remove(arboles.get(i));
+                                        arboles.remove(i);
+                                        arboles.get(i).setFill(COLOR_ESCENA);
+                                        arboles.get(i).setStroke(COLOR_ESCENA);
+                                    }
+                                }
+
                             }
 
                         }
@@ -331,7 +325,9 @@ public class Aplicacion_0 extends Application
                 @Override
                 public void run() {
 
-                    seCreaUnArbol = true;
+                    if( sonidoDeCapturado == true ){
+                        Toolkit.getDefaultToolkit().beep();    
+                    }
 
                 }                        
             };
