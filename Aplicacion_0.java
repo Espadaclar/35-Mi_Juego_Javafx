@@ -50,28 +50,7 @@ public class Aplicacion_0 extends Application
     private int velocidadEnBarraX;
     private int velocidadEnBarraY;
     private  Pelota pelota;
-
-    Color COLOR_ESCENA = Color.WHITE;
-    private boolean sonidoDeCapturado = false;
-    private boolean seCreaUnArbol = false;
-    private int cuentaArboles = 0;
-
-    int LARGO_ESCENA = 800;
-    int ALTO_ESCENA = 650;
-
-    int LARGO_CAZADOR = 60;
-    int ALTO_CAZADOR = 60;
-    int POSICION_X_CAZADOR = LARGO_ESCENA /4;
-    int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
-
-    int NUM_DE_BOLAS = 10;
-    int NUM_DE_ARBOLES = 9;
-
-    int RADIO = 15;
-
-    int LARGO_BOTON = 80;
-    int ALTO_BOTON = 5;
-
+    
     private int contDeTiempo = 1;
     //----- EL CRONOMETRO DEL JUEGO ES DESCENDENTE, EMPIEZA EN 'tiempoEnSegundos'.
     private int tiempoEnSegundos = 966;
@@ -81,6 +60,29 @@ public class Aplicacion_0 extends Application
     // MECANISMO DE CORRECCIÓN,( para que aparezca un arbol cada vez que desaparece una bolita.)
     private int corrector_1 = -1;
     private int corrector_0 = -1;
+
+    Color COLOR_ESCENA = Color.WHITE;
+    private boolean sonidoDeCapturado = false;
+    private boolean seCreaUnArbol = false;
+    private int cuentaArboles = 0;
+
+    int LARGO_ESCENA = 800;
+    int ALTO_ESCENA = 650;
+    int LARGO_CAZADOR = 60;
+    int ALTO_CAZADOR = 60;
+    int LARGO_BOTON = 80;
+    int ALTO_BOTON = 5;
+    int POSICION_X_CAZADOR = LARGO_ESCENA /4;
+    int POSICION_Y_CAZADOR = ALTO_ESCENA /5;
+    
+    int NUM_DE_BOLAS = 10;
+    int NUM_DE_ARBOLES = 4;
+
+    int RADIO = 15;
+
+    
+
+    
 
     public static void main(String[] args){
 
@@ -117,6 +119,7 @@ public class Aplicacion_0 extends Application
                 acumCoorDeX = 0;
             }
 
+            //Poligono arbol = new Poligono(50, 200, 200, 50, Color.BLACK);
             Poligono arbol = new Poligono(acumCoorDeX, coorDeY, 10, 100, Color.BLACK);
             acumCoorDeX += coorDeX;//----------acumula la medida de las coordenadas en X.
             arbol.setVisible(false);
@@ -163,7 +166,7 @@ public class Aplicacion_0 extends Application
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.setAutoReverse(true);
         //define un valor de movimiento en los ejes x / y.
-        KeyFrame kf = new KeyFrame(Duration.seconds(.004), new EventHandler<ActionEvent>() {
+        KeyFrame kf = new KeyFrame(Duration.seconds(.002), new EventHandler<ActionEvent>() {
 
                     ///////////////// ---------VARIABLE PARA PERMITIR EL RECUENTO DE LAS BARRITAS QUE SE VAN ELIMINADO.
                     int val = root.getChildren().size();
@@ -175,20 +178,20 @@ public class Aplicacion_0 extends Application
                         }
 
                         ///////////////////////////////////////////////// cada vez que se elimina una bolita aparece un arbol.
-                        //if(eliminados < NUM_DE_ARBOLES && eliminados > 0){
 
                         if(eliminados > corrector_0){
                             corrector_1 ++;
                             corrector_0 = eliminados;
                         }
-
                         eliminados = ( val - (root.getChildren().size()) );///---- nº de bolitas eliminadas.
                         bolitasEliminadas.setText("Eliminadas  " +eliminados);
 
-                        arboles.get(corrector_1).setVisible(true);
-                        arboles.get(0).setFill(COLOR_ESCENA);
-                        arboles.get(0).setStroke(COLOR_ESCENA);
-                        // }
+                        if(corrector_1 < NUM_DE_ARBOLES ){
+
+                            arboles.get(corrector_1).setVisible(true);
+                            arboles.get(0).setFill(COLOR_ESCENA);
+                            arboles.get(0).setStroke(COLOR_ESCENA);
+                        }
 
                         ///////////////////////////////////////////////// Actualizamos la etiqueta del tiempo
                         int minutos = tiempoEnSegundos / 60;
