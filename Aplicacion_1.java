@@ -37,34 +37,33 @@ import java.util.ArrayList;
  */
 public class Aplicacion_1 extends Application 
 {
-    private Circle cicle;
-    private Rectangle rectangulo;
-    //velocidad del cÃ­rculo.
+    private  Pelota pelota;
+    private ArrayList<Poligono> arboles = new ArrayList<>(); // ----------- línea 126.
+    private ArrayList<Pelota> pelotas = new ArrayList<>();   // ----------- línea 130 / 136
+    //velocidad del círculo.
     private int velocidadX = 1;
     private int velocidadY = 1;
     //velocidad de la barra.
     private int velocidadEnBarraX;
     private int velocidadEnBarraY;
-    private  Pelota pelota;
 
     private int contDeTiempo = 1;
     //----- EL CRONOMETRO DEL JUEGO ES DESCENDENTE, EMPIEZA EN 'tiempoEnSegundos'.
     private int tiempoEnSegundos = 966;
     private int numeroBolaEnescena = 0;
     private int eliminados = 0;
+    private boolean ponArbol = false;
 
-    private int[] conColor;
-
-    // MECANISMO DE CORRECCIÃ“N,( para que aparezca un arbol cada vez que desaparece una bolita.)
+    // MECANISMO DE CORRECCIÓN,( para que aparezca un arbol cada vez que desaparece una bolita.)
     private int corrector_1 = -1;
     private int corrector_0 = -1;
 
     Color COLOR_ESCENA = Color.WHITE;
     private boolean sonidoDeCapturado = false;
     private boolean seCreaUnArbol = false;
-    private int cuentaArboles = 0;
+    private int arbolesPlantados = 0;
 
-    int LARGO_ESCENA = 800;
+    int LARGO_ESCENA = 1200;
     int ALTO_ESCENA = 650;
     int LARGO_CAZADOR = 60;
     int ALTO_CAZADOR = 60;
@@ -75,30 +74,29 @@ public class Aplicacion_1 extends Application
 
     int NUM_DE_BOLAS = 20;
     int NUM_DE_ARBOLES = 20;
+    private int[] conColor = new int[NUM_DE_ARBOLES];
 
     int RADIO = 15;
 
     public static void main(String[] args){
-        //Esto se utiliza para ejecutar la aplicaciÃ³n 
+        //Esto se utiliza para ejecutar la aplicación 
         //es como el new Contructor()
         launch(args);
     }
 
-    public void start(Stage ventana){//parÃ¡metro que va ha ser la ventan de la aplicaciÃ³n
+    public void start(Stage ventana){//parámetro que va ha ser la ventan de la aplicación
 
         Group root = new Group(); //contenedor que colocamos dentro de la escena.
 
         Scene escena = new Scene(root, LARGO_ESCENA, ALTO_ESCENA, COLOR_ESCENA);//Se crea la escena con el contenedor que contiene los objetos.
-        ventana.setScene(escena);//pasamos al parÃ¡metro ventana el objeto escena.
+        ventana.setScene(escena);//pasamos al parámetro ventana el objeto escena.
 
         ////////////////////////////////////////////////////////////////////////////////***********************************      SE CREA EL POLIGONO CAZADOR DE BOLITAS.
 
         Poligono cazador = new Poligono(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
 
-         /////////////////////////////////////////////////////////////////////////////// *******************     COLECCioN DE POLIGONOS ARBOL.
-
-        ArrayList<Poligono> arboles = new ArrayList<>();
+        ///////////////////////////////////////////////////////////////// *******************     COLECCioN DE POLIGONOS ARBOL.
         int coorDeX = LARGO_ESCENA /10 ;//------variable para determinar la coordenada de X.
         int aux = coorDeX;
         int aux2 = coorDeX;
@@ -119,37 +117,34 @@ public class Aplicacion_1 extends Application
                 aux += coorDeX;
             }
             Poligono arbol = new Poligono(acumCoorDeX, coorDeY, 10, 100, Color.BLACK);
-
-             arbol.setVisible(false);
-            root.getChildren().add(arbol);
             arboles.add(arbol);
         }
         /////////////////////////////////////////////////////////////////////////////////////********* COLECCioN DE PELOTAS.
-        ArrayList<Pelota> pelotas = new ArrayList<>();
+
         pelota =  new  Pelota( LARGO_ESCENA/2,ALTO_ESCENA/2, RADIO);
         for(int i = 0; i < NUM_DE_BOLAS ; i ++){
             Random ale = new Random();
-            pelota = new Pelota(ale.nextInt(LARGO_ESCENA/2), ale.nextInt(ALTO_ESCENA/2), 10);
+            pelota = new Pelota(ale.nextInt( (LARGO_ESCENA/2) -(RADIO)) +RADIO , ale.nextInt( (ALTO_ESCENA/2) -RADIO ) +RADIO , 10);
             //pelota = new Pelota(ale.nextInt(LARGO_ESCENA/2), ale.nextInt(ALTO_ESCENA/2), ale.nextInt(RADIO) +10);
             pelotas.add(pelota);
         }
-        for(int i = 0; i < NUM_DE_BOLAS; i ++ ){// aÃ±ade pelotas a la escena.
+        for(int i = 0; i < NUM_DE_BOLAS; i ++ ){// añade pelotas a la escena.
             root.getChildren().add(pelotas.get(i));
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////SE CREA UN  CRONÃ“METRO
+        /////////////////////////////////////////////////////////////////////////////////////////SE CREA UN  CRONÓMETRO
 
         Label tiempoPasado = new Label("0");  //-------------objeto Label para pasar como parametro.
         Objetos_De_Apollo miLabelCronometro = new Objetos_De_Apollo();//-Objetos_De_Apollo, hecha en este proyecto.
         miLabelCronometro.crearUnLabel(tiempoPasado, root,12, 25);//-------muestra cronometro  de descuento.
 
-        ////////////////////////////////////////////////////SE CREA EL  CONTADOR DEL NÂº DE  BOLITAS QUE SE VAN ELIMINANDO, ////     
+        ////////////////////////////////////////////////////SE CREA EL  CONTADOR DEL Nº DE  BOLITAS QUE SE VAN ELIMINANDO, ////     
 
         Label bolitasEliminadas = new Label();  //-------------objeto Label para pasar como parametro.
         Objetos_De_Apollo miLabelContador = new Objetos_De_Apollo();//-Objetos_De_Apollo, hecha en este proyecto.
-        miLabelContador.crearUnLabel(bolitasEliminadas, root, 12, 60);//-------muestra el nÂº de bolitas eliminadas.
+        miLabelContador.crearUnLabel(bolitasEliminadas, root, 12, 60);//-------muestra el nº de bolitas eliminadas.
 
-        ////////////////////////////////////////////////////////////////////////////////// SE CREA UN BOTÃ“N
+        ////////////////////////////////////////////////////////////////////////////////// SE CREA UN BOTÓN
 
         Button boton = new Button("Stop / Move");
         boton.setDefaultButton(true);
@@ -174,17 +169,17 @@ public class Aplicacion_1 extends Application
                         }
 
                         ///////////////////////////////////////////////// cada vez que se elimina una bolita aparece un arbol.
-                        if(eliminados > corrector_0){
-                            corrector_1 ++;
-                            corrector_0 = eliminados;
-                        }
-                        eliminados = ( val - (root.getChildren().size()) );///---- nÂº de bolitas eliminadas.
-                        bolitasEliminadas.setText("Eliminadas  " +eliminados);
-
-                        if(corrector_1 < NUM_DE_ARBOLES ){
-                            arboles.get(corrector_1).setVisible(true);
-                           // arboles.get(0).setFill(COLOR_ESCENA);
-                            arboles.get(0).setStroke(COLOR_ESCENA);
+                        //                         if(eliminados > corrector_0){
+                        //                             corrector_1 ++;
+                        //                             corrector_0 = eliminados;
+                        //                         }
+                        eliminados = ( val - (root.getChildren().size()) );///---- nº de bolitas eliminadas.
+                        bolitasEliminadas.setText("Eliminadas  " +arbolesPlantados);
+                        //bolitasEliminadas.setText("Eliminadas  " +eliminados);
+                        if(ponArbol == true){
+                            root.getChildren().add(arboles.get(arbolesPlantados));
+                            arbolesPlantados ++;
+                            ponArbol = false;
                         }
 
                         ///////////////////////////////////////////////// Actualizamos la etiqueta del tiempo
@@ -214,7 +209,7 @@ public class Aplicacion_1 extends Application
 
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                        //PARA QUE REBOTEN LAS BOLAS AL COLISIONAR CON LAS BARRITAS.
+                        //PARA QUE REBOTE el cuadrado CAZADOR AL COLISIONAR CON LAS BARRITAS.
                         //for(int i = 0; i < pelotas.size(); i ++ ){
                         for(int a = 0; a < arboles.size(); a ++ ){
 
@@ -243,8 +238,8 @@ public class Aplicacion_1 extends Application
                                 cazador.cambiarDireccionArriba(ALTO_ESCENA);
                                 arboles.get(a).setFill(color); 
 
-                                //////TRATA DE PONER ROJO AL ARBOL EN EL 2Âº GOLPE, Y ELIMINARLO AL 3Âº.
-                                conColor = new int[NUM_DE_ARBOLES]; 
+                                //se almacena en un Array le nº veces que ha sido golpeada cada barrita, a la 2º se pone roja
+                                // a la 3º desaparece.
                                 conColor[a] = conColor[a] +1; 
                                 for(int i = 0; i < NUM_DE_ARBOLES; i ++){
                                     if(conColor[i] == 2){
@@ -252,8 +247,6 @@ public class Aplicacion_1 extends Application
                                     }
                                     else if(conColor[i] == 3){
                                         root.getChildren().remove(arboles.get(i));
-                                        arboles.remove(i);
-                                        arboles.get(i).setFill(COLOR_ESCENA);
                                         arboles.get(i).setStroke(COLOR_ESCENA);
                                     }
                                 }
@@ -262,13 +255,14 @@ public class Aplicacion_1 extends Application
 
                         }
                         // }
+
                     }
                 });
 
         timeline.getKeyFrames().add(kf);
         timeline.play();
         ventana.show();
-        ////////////////////////////////////////////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÃ“N CUANDO ESTE ACTIVADO.
+        ////////////////////////////////////////////////////////////  PARA ACTIVAR Y DESACTIVAR EL BOTÓN CUANDO ESTE ACTIVADO.
         boton.setOnAction(event2 -> {
                 if (timeline.getStatus() == Status.PAUSED){
                     timeline.play();
@@ -299,6 +293,8 @@ public class Aplicacion_1 extends Application
                         //for(Pelota pelota: pelotas){
                         if( cazador.capturadaPelota(pelotas.get(i)) == true ){
                             root.getChildren().remove(pelotas.get(i));
+
+                            ponArbol = true;//---------- se muestra un arbol en pantalla.
                             //root.getChildren().remove(pelota);
 
                         }
@@ -307,7 +303,7 @@ public class Aplicacion_1 extends Application
                 }
 
             });
-        //---------- REALIZA UNA ACCION CADA UN NÂº DETERMINADO DE MILISEGUNDOS.
+        //---------- REALIZA UNA ACCION CADA UN Nº DETERMINADO DE MILISEGUNDOS.
         TimerTask tarea = new TimerTask() {
                 @Override
                 public void run() {
@@ -337,4 +333,3 @@ public class Aplicacion_1 extends Application
     }
 
 }
-
