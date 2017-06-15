@@ -96,7 +96,7 @@ public class Aplicacion_0 extends Application
         Poligono cazador = new Poligono(POSICION_X_CAZADOR, POSICION_Y_CAZADOR, LARGO_CAZADOR, ALTO_CAZADOR, COLOR_ESCENA);
         root.getChildren().add(cazador);
 
-         /////////////////////////////////////////////////////////////////////////////// *******************     COLECCioN DE POLIGONOS ARBOL.
+        /////////////////////////////////////////////////////////////////////////////// *******************     COLECCioN DE POLIGONOS ARBOL.
 
         ArrayList<Poligono> arboles = new ArrayList<>();
         int coorDeX = LARGO_ESCENA /10 ;//------variable para determinar la coordenada de X.
@@ -120,7 +120,7 @@ public class Aplicacion_0 extends Application
             }
             Poligono arbol = new Poligono(acumCoorDeX, coorDeY, 10, 100, Color.BLACK);
 
-             arbol.setVisible(false);
+            arbol.setVisible(false);
             root.getChildren().add(arbol);
             arboles.add(arbol);
         }
@@ -186,6 +186,8 @@ public class Aplicacion_0 extends Application
                            // arboles.get(0).setFill(COLOR_ESCENA);
                             arboles.get(0).setStroke(COLOR_ESCENA);
                         }
+
+                        
 
                         ///////////////////////////////////////////////// Actualizamos la etiqueta del tiempo
                         int minutos = tiempoEnSegundos / 60;
