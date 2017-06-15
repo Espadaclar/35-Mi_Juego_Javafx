@@ -120,7 +120,7 @@ public class Aplicacion_1 extends Application
             }
             Poligono arbol = new Poligono(acumCoorDeX, coorDeY, 10, 100, Color.BLACK);
 
-            // arbol.setVisible(false);
+             arbol.setVisible(false);
             root.getChildren().add(arbol);
             arboles.add(arbol);
         }
